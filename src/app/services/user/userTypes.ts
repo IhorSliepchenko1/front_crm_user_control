@@ -14,6 +14,7 @@ export type GetUserData = {
   in_progress_tasks: number;
   canceled_task: number;
   roles: UserRoles;
+  avatarPath: string | null;
 };
 export type GetUsersData = {
   users: GetUserData[];

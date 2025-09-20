@@ -13,7 +13,7 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    userById: builder.mutation<ApiResponse<{ data: GetUserData }>, string>({
+    userById: builder.query<ApiResponse<GetUserData>, string>({
       query: (id) => ({
         url: `/users/user/${id}`,
         method: METHODS.GET,
@@ -68,5 +68,6 @@ export const {
   useIsActiveUserMutation,
   useLazyGetUsersQuery,
   useRenameUserByIdMutation,
-  useUserByIdMutation,
+  useLazyUserByIdQuery,
+  useUserByIdQuery,
 } = authApi;

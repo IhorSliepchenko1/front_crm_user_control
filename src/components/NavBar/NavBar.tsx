@@ -17,7 +17,7 @@ import {
   useLazyGetMeQuery,
   useLogoutMeMutation,
 } from "@/app/services/auth/authApi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -42,7 +42,7 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 const mockdata = [
-  { icon: IconHome2, label: "Домой" },
+  { icon: IconHome2, label: "Домой", navigate: "/" },
   { icon: IconUserPlus, label: "Пользователи", navigate: "/users" },
   // { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
   // { icon: IconCalendarStats, label: "Releases" },
@@ -52,18 +52,16 @@ const mockdata = [
 ];
 
 export function NavBar() {
-  const [active, setActive] = useState(0);
-
   const url = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const links = mockdata.map((link, index) => (
+  const links = mockdata.map((link) => (
     <NavbarLink
       {...link}
       key={link.label}
-      active={index === active}
+      active={pathname === link.navigate}
       onClick={() => {
-        setActive(index);
         navigate(link.navigate as string);
       }}
     />
@@ -100,7 +98,7 @@ export function NavBar() {
       </div>
 
       <span className="flex justify-center">
-        <Stack justify="center" gap={0}>
+        <Stack justify="center">
           <NavbarLink icon={IconLogout} label="Выход" onClick={logoutSession} />
         </Stack>
       </span>

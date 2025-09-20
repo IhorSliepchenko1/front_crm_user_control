@@ -3,7 +3,8 @@ import {
   useLazyGetUsersQuery,
 } from "@/app/services/user/userApi";
 import type { GetUserData } from "@/app/services/user/userTypes";
-import { Button, Table } from "@mantine/core";
+import { Avatar, Button, Center, Table } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   users: GetUserData[];
@@ -15,6 +16,12 @@ type Props = {
 const UserRows: React.FC<Props> = ({ users, page, limit, active }) => {
   const [isActive] = useIsActiveUserMutation();
   const [triggerUsers] = useLazyGetUsersQuery();
+  const navigate = useNavigate();
+  const url = import.meta.env.VITE_API_URL;
+
+  const openUserPage = (id: string) => {
+    navigate(`user/${id}`);
+  };
 
   const changeStatus = async (id: string) => {
     try {
@@ -27,7 +34,16 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active }) => {
 
   const rows = users.map((user) => (
     <Table.Tr key={user.id} className="text-[12px]">
-      <Table.Td onClick={() => console.log(user.id)}>{user.name}</Table.Td>
+      <Table.Td>
+        <Center>
+          {user.avatarPath ? (
+            <Avatar src={`${url}/${user.avatarPath}`} alt="it's user" />
+          ) : (
+            <Avatar name={user.name} color="initials" />
+          )}
+        </Center>
+      </Table.Td>
+      <Table.Td onClick={() => openUserPage(user.id)}>{user.name}</Table.Td>
       <Table.Td>{user.created_at}</Table.Td>
       <Table.Td>{user.creator_projects}</Table.Td>
       <Table.Td>{user.participant_projects}</Table.Td>
@@ -39,9 +55,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active }) => {
 
       <Table.Td>
         <span
-          className={`text-[${
-            user.roles.includes("ADMIN") ? "teal" : "orange"
-          }]`}
+          style={{ color: user.roles.includes("ADMIN") ? "teal" : "orange" }}
         >
           {user.roles.includes("ADMIN") ? "ADMIN" : "USER"}
         </span>
