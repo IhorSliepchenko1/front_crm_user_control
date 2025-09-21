@@ -36,6 +36,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginFormData) => {
+    setErrorMessage("");
     try {
       await login(data).unwrap();
       await triggerMe().unwrap();
@@ -81,6 +82,7 @@ const Login = () => {
           isShow={Boolean(errorMessage)}
           message={errorMessage}
           type="error"
+          setErrorMessage={setErrorMessage}
         />
       </div>
     </div>

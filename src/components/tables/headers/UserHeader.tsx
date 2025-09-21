@@ -1,6 +1,6 @@
 import { Table } from "@mantine/core";
 
-const UserHeader = () => {
+const UserHeader = ({ isAdmin }: { isAdmin: boolean }) => {
   return (
     <Table.Thead className="text-[12px]">
       <Table.Tr>
@@ -15,7 +15,7 @@ const UserHeader = () => {
         <Table.Th>задачи в работе</Table.Th>
         <Table.Th>отменёные задачи</Table.Th>
         <Table.Th>роль</Table.Th>
-        <Table.Th>смена статуса</Table.Th>
+        {isAdmin && <Table.Th>смена статуса</Table.Th>}
       </Table.Tr>
     </Table.Thead>
   );

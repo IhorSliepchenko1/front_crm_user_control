@@ -60,8 +60,14 @@ const Users = () => {
           </div>
 
           <Table striped highlightOnHover withTableBorder withColumnBorders>
-            <UserHeader />
-            <UserRows users={users} page={page} limit={limit} active={active} />
+            <UserHeader isAdmin={Boolean(isAdmin)} />
+            <UserRows
+              users={users}
+              page={page}
+              limit={limit}
+              active={active}
+              isAdmin={Boolean(isAdmin)}
+            />
           </Table>
 
           <Pagination total={total} setPage={setPage} />

@@ -23,3 +23,7 @@ export type GetUsersData = {
   page: number;
   limit: number;
 };
+
+export type UserById = {
+  data: { title: string; value: any }[];
+};

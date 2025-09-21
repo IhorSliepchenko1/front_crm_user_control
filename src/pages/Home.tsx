@@ -1,5 +1,3 @@
-import { isAdminRole } from "@/app/features/authSlice";
-import { useAppSelector } from "@/app/hooks";
 import { useUserByIdQuery } from "@/app/services/user/userApi";
 import UserUpdateForm from "@/components/forms/UserUpdateForm";
 import AlertMessage from "@/components/UI/AlertMessage";
@@ -8,34 +6,28 @@ import UserAvatar from "@/components/UI/UserAvatar";
 import UserData from "@/components/UserData";
 import { Divider, Title } from "@mantine/core";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 
-const User = () => {
-  const { id } = useParams();
-  const isAdmin = useAppSelector(isAdminRole);
-  const { data, isLoading } = useUserByIdQuery(id as string);
+const Home = () => {
+  const { data, isLoading } = useUserByIdQuery("my-profile");
   const avatar = data?.data?.find((item) => item.title === "avatarPath")?.value;
   const name = data?.data?.find((item) => item.title === "имя")?.value;
   const userData = data?.data ? data?.data : [];
   const [errorMessage, setErrorMessage] = useState<string>("");
-
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
         <>
-          <Title order={2}>Информация о пользователе</Title>
+          <Title order={2}>Мой профиль</Title>
           <div className="flex justify-start gap-10 py-10">
             <UserAvatar avatar={avatar} name={name} />
             <UserData userData={userData} />
-            {isAdmin && (
-              <UserUpdateForm
-                id={id as string}
-                name={name as string}
-                setErrorMessage={setErrorMessage}
-              />
-            )}
+            <UserUpdateForm
+              id={"my-profile"}
+              name={name as string}
+              setErrorMessage={setErrorMessage}
+            />
           </div>
           <AlertMessage
             isShow={Boolean(errorMessage)}
@@ -50,4 +42,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Home;

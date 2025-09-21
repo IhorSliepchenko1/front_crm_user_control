@@ -1,7 +1,7 @@
 import { METHODS } from "@/utils/methods";
 import { api } from "../api";
 import type { ApiResponse } from "@/types";
-import type { GetUserData, GetUsersData, GetUsersQuery } from "./userTypes";
+import type { GetUsersData, GetUsersQuery, UserById } from "./userTypes";
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,7 +13,10 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    userById: builder.query<ApiResponse<GetUserData>, string>({
+    userById: builder.query<
+      ApiResponse<{ title: string; value: any }[]>,
+      string
+    >({
       query: (id) => ({
         url: `/users/user/${id}`,
         method: METHODS.GET,
@@ -58,6 +61,20 @@ export const authApi = api.injectEndpoints({
         }),
       }
     ),
+
+    updateUserById: builder.mutation<
+      ApiResponse,
+      {
+        formData: FormData;
+        id: string;
+      }
+    >({
+      query: ({ formData, id }) => ({
+        url: `/users/update-user/${id}`,
+        method: METHODS.PUT,
+        body: formData,
+      }),
+    }),
   }),
 });
 
@@ -70,4 +87,5 @@ export const {
   useRenameUserByIdMutation,
   useLazyUserByIdQuery,
   useUserByIdQuery,
+  useUpdateUserByIdMutation,
 } = authApi;

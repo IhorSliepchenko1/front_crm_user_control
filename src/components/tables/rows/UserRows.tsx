@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/app/hooks";
 import {
   useIsActiveUserMutation,
   useLazyGetUsersQuery,
@@ -11,13 +12,15 @@ type Props = {
   page: number;
   limit: number;
   active: boolean;
+  isAdmin: boolean;
 };
 
-const UserRows: React.FC<Props> = ({ users, page, limit, active }) => {
+const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
   const [isActive] = useIsActiveUserMutation();
   const [triggerUsers] = useLazyGetUsersQuery();
   const navigate = useNavigate();
   const url = import.meta.env.VITE_API_URL;
+  const myName = useAppSelector((state) => state.auth.userData?.name);
 
   const openUserPage = (id: string) => {
     navigate(`user/${id}`);
@@ -43,7 +46,10 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active }) => {
           )}
         </Center>
       </Table.Td>
-      <Table.Td onClick={() => openUserPage(user.id)}>{user.name}</Table.Td>
+      <Table.Td onClick={() => openUserPage(user.id)}>
+        {user.name}
+        <span className="text-[red]">{myName === user.name ? "(Я) " : ""}</span>
+      </Table.Td>
       <Table.Td>{user.created_at}</Table.Td>
       <Table.Td>{user.creator_projects}</Table.Td>
       <Table.Td>{user.participant_projects}</Table.Td>
@@ -60,18 +66,21 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active }) => {
           {user.roles.includes("ADMIN") ? "ADMIN" : "USER"}
         </span>
       </Table.Td>
-      <Table.Td>
-        {
-          <Button
-            variant="light"
-            color={user.is_active ? "red" : "green"}
-            size="xs"
-            onClick={() => changeStatus(user.id)}
-          >
-            {user.is_active ? "blocked" : "active"}
-          </Button>
-        }
-      </Table.Td>
+      {isAdmin && (
+        <Table.Td>
+          {
+            <Button
+              variant="light"
+              color={user.is_active ? "red" : "green"}
+              size="xs"
+              onClick={() => changeStatus(user.id)}
+              disabled={myName === user.name}
+            >
+              {user.is_active ? "blocked" : "active"}
+            </Button>
+          }
+        </Table.Td>
+      )}
     </Table.Tr>
   ));
   return <Table.Tbody>{rows}</Table.Tbody>;
