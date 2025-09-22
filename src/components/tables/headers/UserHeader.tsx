@@ -16,6 +16,7 @@ const UserHeader = ({ isAdmin }: { isAdmin: boolean }) => {
         <Table.Th>отменёные задачи</Table.Th>
         <Table.Th>роль</Table.Th>
         {isAdmin && <Table.Th>смена статуса</Table.Th>}
+        {isAdmin && <Table.Th>вылогинить</Table.Th>}
       </Table.Tr>
     </Table.Thead>
   );

@@ -13,6 +13,7 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { PencilLine } from "lucide-react";
 
 type UpdateUserFormData = {
   oldPassword?: string;
@@ -82,7 +83,9 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
   return (
     <div className="grid w-[100%]">
       <form onSubmit={form.onSubmit(onSubmit)}>
-        <Title order={4}>Редактировать пользователя</Title>
+        <Title order={3} className="flex items-center gap-2">
+          Редактировать <PencilLine />
+        </Title>
         <div className="grid gap-5 mt-2">
           <TextInput
             {...form.getInputProps("login")}

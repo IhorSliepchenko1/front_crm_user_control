@@ -1,10 +1,13 @@
 import { useAppSelector } from "@/app/hooks";
+import { useLogoutByIdMutation } from "@/app/services/auth/authApi";
 import {
   useIsActiveUserMutation,
   useLazyGetUsersQuery,
 } from "@/app/services/user/userApi";
 import type { GetUserData } from "@/app/services/user/userTypes";
-import { Avatar, Button, Center, Table } from "@mantine/core";
+import { useNotification } from "@/hooks/useNotification/useNotification";
+import { errorMessages } from "@/utils/is-error-message";
+import { Anchor, Avatar, Badge, Button, Center, Table } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -14,12 +17,15 @@ type Props = {
   active: boolean;
   isAdmin: boolean;
 };
+const url = import.meta.env.VITE_API_URL;
 
 const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
+  const { succeed, error } = useNotification();
+
   const [isActive] = useIsActiveUserMutation();
   const [triggerUsers] = useLazyGetUsersQuery();
+  const [logoutUserById] = useLogoutByIdMutation();
   const navigate = useNavigate();
-  const url = import.meta.env.VITE_API_URL;
   const myName = useAppSelector((state) => state.auth.userData?.name);
 
   const openUserPage = (id: string) => {
@@ -28,10 +34,21 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
 
   const changeStatus = async (id: string) => {
     try {
-      await isActive(id).unwrap();
+      const { message } = await isActive(id).unwrap();
       await triggerUsers({ page, limit, active }).unwrap();
-    } catch (error) {
-      console.log(error);
+      succeed(message);
+    } catch (err) {
+      error(errorMessages(err));
+    }
+  };
+
+  const logoutUserByIdSession = async (id: string) => {
+    try {
+      const { message } = await logoutUserById(id).unwrap();
+      await triggerUsers({ page, limit, active }).unwrap();
+      succeed(message);
+    } catch (err) {
+      error(errorMessages(err));
     }
   };
 
@@ -47,8 +64,12 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
         </Center>
       </Table.Td>
       <Table.Td onClick={() => openUserPage(user.id)}>
-        {user.name}
-        <span className="text-[red]">{myName === user.name ? "(Я) " : ""}</span>
+        <Anchor underline="hover">
+          {user.name}
+          <span className="text-[red]">
+            {myName === user.name ? " (Я)" : ""}
+          </span>
+        </Anchor>
       </Table.Td>
       <Table.Td>{user.created_at}</Table.Td>
       <Table.Td>{user.creator_projects}</Table.Td>
@@ -60,11 +81,9 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
       <Table.Td>{user.canceled_task}</Table.Td>
 
       <Table.Td>
-        <span
-          style={{ color: user.roles.includes("ADMIN") ? "teal" : "orange" }}
-        >
+        <Badge color={user.roles.includes("ADMIN") ? "teal" : "orange"}>
           {user.roles.includes("ADMIN") ? "ADMIN" : "USER"}
-        </span>
+        </Badge>
       </Table.Td>
       {isAdmin && (
         <Table.Td>
@@ -77,6 +96,21 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
               disabled={myName === user.name}
             >
               {user.is_active ? "blocked" : "active"}
+            </Button>
+          }
+        </Table.Td>
+      )}
+      {isAdmin && (
+        <Table.Td>
+          {
+            <Button
+              variant="light"
+              color={"cyan"}
+              size="xs"
+              onClick={() => logoutUserByIdSession(user.id)}
+              disabled={myName === user.name}
+            >
+              {"выход"}
             </Button>
           }
         </Table.Td>

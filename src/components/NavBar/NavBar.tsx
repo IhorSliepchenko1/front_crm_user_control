@@ -1,15 +1,3 @@
-import { useState } from "react";
-import {
-  IconCalendarStats,
-  IconDeviceDesktopAnalytics,
-  IconFingerprint,
-  IconGauge,
-  IconHome2,
-  IconLogout,
-  IconSettings,
-  IconUserPlus,
-  IconUser,
-} from "@tabler/icons-react";
 import { Avatar, Center, Stack, Tooltip, UnstyledButton } from "@mantine/core";
 import classes from "./NavBar.module.scss";
 import { useAppSelector } from "@/app/hooks";
@@ -18,9 +6,10 @@ import {
   useLogoutMeMutation,
 } from "@/app/services/auth/authApi";
 import { useLocation, useNavigate } from "react-router-dom";
+import { House, LogOut, Users } from "lucide-react";
 
 interface NavbarLinkProps {
-  icon: typeof IconHome2;
+  icon: typeof House;
   label: string;
   active?: boolean;
   onClick?: () => void;
@@ -35,20 +24,15 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
         className={classes.link}
         data-active={active || undefined}
       >
-        <Icon size={20} stroke={1.5} />
+        <Icon size={20} />
       </UnstyledButton>
     </Tooltip>
   );
 }
 
 const mockdata = [
-  { icon: IconHome2, label: "Домой", navigate: "/" },
-  { icon: IconUserPlus, label: "Пользователи", navigate: "/users" },
-  // { icon: IconDeviceDesktopAnalytics, label: "Analytics" },
-  // { icon: IconCalendarStats, label: "Releases" },
-  // { icon: IconUser, label: "Account" },
-  // { icon: IconFingerprint, label: "Security" },
-  // { icon: IconSettings, label: "Settings" },
+  { icon: House, label: "Домой", navigate: "/" },
+  { icon: Users, label: "Пользователи", navigate: "/users" },
 ];
 
 export function NavBar() {
@@ -99,7 +83,7 @@ export function NavBar() {
 
       <span className="flex justify-center">
         <Stack justify="center">
-          <NavbarLink icon={IconLogout} label="Выход" onClick={logoutSession} />
+          <NavbarLink icon={LogOut} label="Выход" onClick={logoutSession} />
         </Stack>
       </span>
     </nav>

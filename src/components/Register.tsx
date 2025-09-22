@@ -45,33 +45,35 @@ const Register: React.FC<GetUsersQuery> = ({ page, limit, active }) => {
   return (
     <>
       <form onSubmit={form.onSubmit(onSubmit)}>
-        <TextInput
-          {...form.getInputProps("login")}
-          key={form.key("login")}
-          label="Логин"
-          placeholder="логин пользователя"
-          required
-          size="xs"
-        />
-        <PasswordInput
-          label="Пароль"
-          placeholder="пароль пользователя"
-          key={form.key("password")}
-          {...form.getInputProps("password")}
-          required
-          size="xs"
-        />
+        <div className="grid gap-3">
+          <TextInput
+            {...form.getInputProps("login")}
+            key={form.key("login")}
+            label="Логин"
+            placeholder="логин пользователя"
+            required
+            size="md"
+          />
+          <PasswordInput
+            label="Пароль"
+            placeholder="пароль пользователя"
+            key={form.key("password")}
+            {...form.getInputProps("password")}
+            required
+            size="md"
+          />
 
-        <TextInput
-          {...form.getInputProps("adminCode")}
-          label="Админ код"
-          key={form.key("adminCode")}
-          placeholder="код администратора"
-          size="xs"
-        />
+          <TextInput
+            {...form.getInputProps("adminCode")}
+            label="Админ код"
+            key={form.key("adminCode")}
+            placeholder="код администратора"
+            size="md"
+          />
+        </div>
 
-        <div className="mt-2 grid">
-          <Button type="submit" size="xs" variant="outline">
+        <div className="mt-5 grid">
+          <Button type="submit" size="md" variant="outline">
             Зарегистрировать
           </Button>
         </div>
