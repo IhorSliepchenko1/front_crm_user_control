@@ -3,7 +3,8 @@ import {
   useLazyUserByIdQuery,
   useUpdateUserByIdMutation,
 } from "@/app/services/user/userApi";
-import { isErrorMessage } from "@/utils/is-error-message";
+import { useNotification } from "@/hooks/useNotification/useNotification";
+import { errorMessages } from "@/utils/is-error-message";
 import {
   Button,
   FileInput,
@@ -23,10 +24,9 @@ type UpdateUserFormData = {
 type Props = {
   id: string;
   name: string;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const UserUpdateForm: React.FC<Props> = ({ id, name, setErrorMessage }) => {
+const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
   const form = useForm<UpdateUserFormData>({
     mode: "uncontrolled",
     validate: {
@@ -52,9 +52,9 @@ const UserUpdateForm: React.FC<Props> = ({ id, name, setErrorMessage }) => {
   const [userUpdate] = useUpdateUserByIdMutation();
   const [triggerUser] = useLazyUserByIdQuery();
   const [triggerMe] = useLazyGetMeQuery();
+  const { succeed, error } = useNotification();
 
   const onSubmit = async (data: UpdateUserFormData) => {
-    setErrorMessage("");
     try {
       const { login, newPassword, oldPassword, files } = data;
       const formData = new FormData();
@@ -69,15 +69,14 @@ const UserUpdateForm: React.FC<Props> = ({ id, name, setErrorMessage }) => {
         });
       }
 
-      await userUpdate({ id, formData }).unwrap();
+      const { message } = await userUpdate({ id, formData }).unwrap();
       await triggerUser(id).unwrap();
       await triggerMe().unwrap();
-
       form.reset();
-    } catch (error) {
-      const message = isErrorMessage(error);
-      setErrorMessage(message);
+      succeed(message);
+    } catch (err) {
       form.reset();
+      error(errorMessages(err));
     }
   };
   return (

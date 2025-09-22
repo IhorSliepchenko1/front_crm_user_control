@@ -2,12 +2,11 @@ import {
   useLazyGetMeQuery,
   useLoginMutation,
 } from "@/app/services/auth/authApi";
-import { isErrorMessage } from "@/utils/is-error-message";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { Button, Checkbox, PasswordInput, TextInput } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
-import AlertMessage from "@/components/UI/AlertMessage";
+import { useNotification } from "@/hooks/useNotification/useNotification";
+import { errorMessages } from "@/utils/is-error-message";
 
 type LoginFormData = {
   login: string;
@@ -29,22 +28,21 @@ const Login = () => {
     },
   });
 
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
   const [login] = useLoginMutation();
   const [triggerMe] = useLazyGetMeQuery();
   const navigate = useNavigate();
+  const { succeed, error } = useNotification();
 
   const onSubmit = async (data: LoginFormData) => {
-    setErrorMessage("");
     try {
-      await login(data).unwrap();
+      const { message } = await login(data).unwrap();
       await triggerMe().unwrap();
       form.reset();
       navigate("/");
-    } catch (error) {
-      const message = isErrorMessage(error);
-      setErrorMessage(message);
+      succeed(message);
+    } catch (err) {
+      form.reset();
+      error(errorMessages(err));
     }
   };
 
@@ -77,14 +75,6 @@ const Login = () => {
           Войти
         </Button>
       </form>
-      <div className="absolute bottom-0 w-[100%] p-3">
-        <AlertMessage
-          isShow={Boolean(errorMessage)}
-          message={errorMessage}
-          type="error"
-          setErrorMessage={setErrorMessage}
-        />
-      </div>
     </div>
   );
 };

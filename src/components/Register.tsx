@@ -1,11 +1,10 @@
 import { useRegisterMutation } from "@/app/services/auth/authApi";
 import { useLazyGetUsersQuery } from "@/app/services/user/userApi";
 import type { GetUsersQuery } from "@/app/services/user/userTypes";
-import { isErrorMessage } from "@/utils/is-error-message";
+import { errorMessages } from "@/utils/is-error-message";
 import { Button, Divider, PasswordInput, TextInput } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
-import { useState } from "react";
-import AlertMessage from "./UI/AlertMessage";
+import { useNotification } from "@/hooks/useNotification/useNotification";
 
 type RegisterFormData = {
   login: string;
@@ -27,19 +26,19 @@ const Register: React.FC<GetUsersQuery> = ({ page, limit, active }) => {
     },
   });
 
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
   const [register] = useRegisterMutation();
   const [triggerUsers] = useLazyGetUsersQuery();
+  const { succeed, error } = useNotification();
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await register(data).unwrap();
+      const { message } = await register(data).unwrap();
       await triggerUsers({ page, limit, active }).unwrap();
       form.reset();
-    } catch (error) {
-      const message = isErrorMessage(error);
-      setErrorMessage(message);
+      succeed(message);
+    } catch (err) {
+      form.reset();
+      error(errorMessages(err));
     }
   };
 
@@ -77,12 +76,6 @@ const Register: React.FC<GetUsersQuery> = ({ page, limit, active }) => {
           </Button>
         </div>
       </form>
-      <AlertMessage
-        isShow={Boolean(errorMessage)}
-        message={errorMessage}
-        type="error"
-      />
-
       <Divider my="md" />
     </>
   );

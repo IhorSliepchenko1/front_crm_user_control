@@ -19,11 +19,6 @@ export const AuthGuard: React.FC<Props> = ({ children }) => {
     if (data && pathname === "/login") {
       navigate("/");
     }
-
-    if (data && !data.roles.includes("ADMIN") && pathname === "/admin") {
-      alert("У вас отсутствуют права доступа");
-      navigate("/");
-    }
   }, [data]);
 
   return <>{isLoading ? <Loader /> : children}</>;
