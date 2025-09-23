@@ -1,7 +1,6 @@
 import { Table } from "@mantine/core";
 
 const ProjectHeader = () => {
-
   return (
     <Table.Thead className="text-[12px]">
       <Table.Tr>
