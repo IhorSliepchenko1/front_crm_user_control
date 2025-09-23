@@ -3,3 +3,12 @@ export type ApiResponse<T = undefined> = {
   message: string;
   data?: T;
 };
+
+export type Pagination = { page: number; limit: number; active: boolean };
+
+export type PageDetails = {
+  total: number;
+  count_pages: number;
+  page: number;
+  limit: number;
+};

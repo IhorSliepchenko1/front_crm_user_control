@@ -4,8 +4,8 @@ const UserHeader = ({ isAdmin }: { isAdmin: boolean }) => {
   return (
     <Table.Thead className="text-[12px]">
       <Table.Tr>
-        <Table.Th>аватар</Table.Th>
         <Table.Th>имя</Table.Th>
+        <Table.Th>аватар</Table.Th>
         <Table.Th>создан</Table.Th>
         <Table.Th>проекты</Table.Th>
         <Table.Th>участник проектов</Table.Th>

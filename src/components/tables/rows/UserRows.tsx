@@ -54,6 +54,14 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
 
   const rows = users.map((user) => (
     <Table.Tr key={user.id} className="text-[12px]">
+      <Table.Td onClick={() => openUserPage(user.id)} className="text-[8px]">
+        <Anchor underline="hover">
+          {user.name}
+          <span className="text-[red]">
+            {myName === user.name ? " (Я)" : ""}
+          </span>
+        </Anchor>
+      </Table.Td>
       <Table.Td>
         <Center>
           {user.avatarPath ? (
@@ -63,14 +71,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
           )}
         </Center>
       </Table.Td>
-      <Table.Td onClick={() => openUserPage(user.id)}>
-        <Anchor underline="hover">
-          {user.name}
-          <span className="text-[red]">
-            {myName === user.name ? " (Я)" : ""}
-          </span>
-        </Anchor>
-      </Table.Td>
+
       <Table.Td>{user.created_at}</Table.Td>
       <Table.Td>{user.creator_projects}</Table.Td>
       <Table.Td>{user.participant_projects}</Table.Td>

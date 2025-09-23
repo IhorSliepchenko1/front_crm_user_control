@@ -6,13 +6,14 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/Layout.tsx";
 import Login from "./pages/Login.tsx";
-import Main from "./pages/Main.tsx";
+import Main from "./components/layout/Main.tsx";
 import { MantineProvider } from "@mantine/core";
 import User from "./pages/User.tsx";
 import Users from "./pages/Users.tsx";
 import Home from "./pages/Home.tsx";
+import Layout from "./components/layout/Layout.tsx";
+import Projects from "./pages/Projects.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
           { path: "/", element: <Home /> },
           { path: "/users", element: <Users /> },
           { path: "users/user/:id", element: <User /> },
+          { path: "/projects", element: <Projects /> },
         ],
       },
     ],

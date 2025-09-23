@@ -6,7 +6,7 @@ import {
   useLogoutMeMutation,
 } from "@/app/services/auth/authApi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { House, LogOut, Users } from "lucide-react";
+import { House, LogOut, Users, FolderKanban } from "lucide-react";
 
 interface NavbarLinkProps {
   icon: typeof House;
@@ -33,6 +33,7 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 const mockdata = [
   { icon: House, label: "Домой", navigate: "/" },
   { icon: Users, label: "Пользователи", navigate: "/users" },
+  { icon: FolderKanban , label: "Проекты", navigate: "/projects" },
 ];
 
 export function NavBar() {

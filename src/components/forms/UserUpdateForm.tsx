@@ -30,6 +30,12 @@ type Props = {
 const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
   const form = useForm<UpdateUserFormData>({
     mode: "uncontrolled",
+    initialValues: {
+      login: "",
+      oldPassword: "",
+      newPassword: "",
+      files: [],
+    },
     validate: {
       login: (value) =>
         value && value.length < 3
@@ -47,6 +53,11 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
         value && value.length < 6
           ? "Минимальная длинна пароля 6 символов!"
           : null,
+
+      files: (value) =>
+        value && value.some((f) => f.size > 1 * 1024 * 1024)
+          ? "Максимальный размер файла 1МБ!"
+          : null,
     },
   });
 
@@ -58,6 +69,7 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
   const onSubmit = async (data: UpdateUserFormData) => {
     try {
       const { login, newPassword, oldPassword, files } = data;
+
       const formData = new FormData();
 
       if (login) formData.append("login", login);
@@ -80,6 +92,7 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
       error(errorMessages(err));
     }
   };
+
   return (
     <div className="grid w-[100%]">
       <form onSubmit={form.onSubmit(onSubmit)}>
@@ -121,7 +134,12 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
           />
         </div>
         <div className="mt-7 grid">
-          <Button type="submit" size="md" variant="outline">
+          <Button
+            type="submit"
+            size="md"
+            variant="outline"
+            disabled={!form.isDirty()}
+          >
             Сохранить
           </Button>
         </div>

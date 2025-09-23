@@ -10,6 +10,7 @@ const Home = () => {
   const avatar = data?.data?.find((item) => item.title === "avatarPath")?.value;
   const name = data?.data?.find((item) => item.title === "имя")?.value;
   const userData = data?.data ? data?.data : [];
+
   return (
     <>
       {isLoading ? (

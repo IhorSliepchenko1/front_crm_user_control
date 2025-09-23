@@ -1,7 +1,7 @@
+import type { PageDetails } from "@/types";
 import type { UserRoles } from "../auth/authTypes";
 
-export type GetUsersQuery = { page: number; limit: number; active: boolean };
-export type GetUserData = {
+export type UserData = {
   id: string;
   name: string;
   is_active: boolean;
@@ -17,13 +17,5 @@ export type GetUserData = {
   avatarPath: string | null;
 };
 export type GetUsersData = {
-  users: GetUserData[];
-  total: number;
-  count_pages: number;
-  page: number;
-  limit: number;
-};
-
-export type UserById = {
-  data: { title: string; value: any }[];
-};
+  users: UserData[];
+} & PageDetails;

@@ -1,10 +1,10 @@
 import { useRegisterMutation } from "@/app/services/auth/authApi";
 import { useLazyGetUsersQuery } from "@/app/services/user/userApi";
-import type { GetUsersQuery } from "@/app/services/user/userTypes";
 import { errorMessages } from "@/utils/is-error-message";
 import { Button, Divider, PasswordInput, TextInput } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
 import { useNotification } from "@/hooks/useNotification/useNotification";
+import type { Pagination } from "@/types";
 
 type RegisterFormData = {
   login: string;
@@ -12,7 +12,7 @@ type RegisterFormData = {
   adminCode?: string;
 };
 
-const Register: React.FC<GetUsersQuery> = ({ page, limit, active }) => {
+const Register: React.FC<Pagination> = ({ page, limit, active }) => {
   const form = useForm<RegisterFormData>({
     mode: "uncontrolled",
     initialValues: {
@@ -44,39 +44,31 @@ const Register: React.FC<GetUsersQuery> = ({ page, limit, active }) => {
 
   return (
     <>
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <div className="grid gap-3">
-          <TextInput
-            {...form.getInputProps("login")}
-            key={form.key("login")}
-            label="Логин"
-            placeholder="логин пользователя"
-            required
-            size="md"
-          />
-          <PasswordInput
-            label="Пароль"
-            placeholder="пароль пользователя"
-            key={form.key("password")}
-            {...form.getInputProps("password")}
-            required
-            size="md"
-          />
+      <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-3">
+        <TextInput
+          {...form.getInputProps("login")}
+          key={form.key("login")}
+          label="Логин"
+          placeholder="логин пользователя"
+          required
+        />
+        <PasswordInput
+          label="Пароль"
+          placeholder="пароль пользователя"
+          key={form.key("password")}
+          {...form.getInputProps("password")}
+          required
+        />
 
-          <TextInput
-            {...form.getInputProps("adminCode")}
-            label="Админ код"
-            key={form.key("adminCode")}
-            placeholder="код администратора"
-            size="md"
-          />
-        </div>
-
-        <div className="mt-5 grid">
-          <Button type="submit" size="md" variant="outline">
-            Зарегистрировать
-          </Button>
-        </div>
+        <TextInput
+          {...form.getInputProps("adminCode")}
+          label="Админ код"
+          key={form.key("adminCode")}
+          placeholder="код администратора"
+        />
+        <Button type="submit" variant="outline">
+          Зарегистрировать
+        </Button>
       </form>
       <Divider my="md" />
     </>

@@ -1,15 +1,25 @@
 import { METHODS } from "@/utils/methods";
 import { api } from "../api";
-import type { ApiResponse } from "@/types";
-import type { GetUsersData, GetUsersQuery, UserById } from "./userTypes";
+import type { ApiResponse, Pagination } from "@/types";
+import type { GetUsersData } from "./userTypes";
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getUsers: builder.query<ApiResponse<GetUsersData>, GetUsersQuery>({
+    getUsers: builder.query<ApiResponse<GetUsersData>, Pagination>({
       query: ({ page, limit, active }) => ({
         url: `/users`,
         method: METHODS.GET,
         params: { page, limit, active },
+      }),
+    }),
+
+    getUsersProject: builder.query<
+      ApiResponse<{ id: string; login: string }[]>,
+      void
+    >({
+      query: () => ({
+        url: `/users/for-project`,
+        method: METHODS.GET,
       }),
     }),
 
@@ -30,37 +40,37 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    renameUserById: builder.mutation<
-      ApiResponse,
-      { id: string; login: string }
-    >({
-      query: ({ id, login }) => ({
-        url: `/users/rename/${id}`,
-        method: METHODS.PATCH,
-        body: { login },
-      }),
-    }),
+    // renameUserById: builder.mutation<
+    //   ApiResponse,
+    //   { id: string; login: string }
+    // >({
+    //   query: ({ id, login }) => ({
+    //     url: `/users/rename/${id}`,
+    //     method: METHODS.PATCH,
+    //     body: { login },
+    //   }),
+    // }),
 
-    changePasswodUserById: builder.mutation<
-      ApiResponse,
-      { id: string; newPassword: string; oldPassword: string }
-    >({
-      query: ({ id, newPassword, oldPassword }) => ({
-        url: `/users/change-password/${id}`,
-        method: METHODS.PATCH,
-        body: { newPassword, oldPassword },
-      }),
-    }),
+    // changePasswodUserById: builder.mutation<
+    //   ApiResponse,
+    //   { id: string; newPassword: string; oldPassword: string }
+    // >({
+    //   query: ({ id, newPassword, oldPassword }) => ({
+    //     url: `/users/change-password/${id}`,
+    //     method: METHODS.PATCH,
+    //     body: { newPassword, oldPassword },
+    //   }),
+    // }),
 
-    changeAvatarUserById: builder.mutation<ApiResponse, { files: Array<File> }>(
-      {
-        query: ({ files }) => ({
-          url: `/users/change-avatar`,
-          method: METHODS.PATCH,
-          body: { files },
-        }),
-      }
-    ),
+    // changeAvatarUserById: builder.mutation<ApiResponse, { files: Array<File> }>(
+    //   {
+    //     query: ({ files }) => ({
+    //       url: `/users/change-avatar`,
+    //       method: METHODS.PATCH,
+    //       body: { files },
+    //     }),
+    //   }
+    // ),
 
     updateUserById: builder.mutation<
       ApiResponse,
@@ -79,13 +89,15 @@ export const authApi = api.injectEndpoints({
 });
 
 export const {
-  useChangeAvatarUserByIdMutation,
-  useChangePasswodUserByIdMutation,
+  // useChangeAvatarUserByIdMutation,
+  // useChangePasswodUserByIdMutation,
+  // useRenameUserByIdMutation,
   useGetUsersQuery,
   useIsActiveUserMutation,
   useLazyGetUsersQuery,
-  useRenameUserByIdMutation,
   useLazyUserByIdQuery,
   useUserByIdQuery,
   useUpdateUserByIdMutation,
+  useGetUsersProjectQuery,
+  useLazyGetUsersProjectQuery,
 } = authApi;

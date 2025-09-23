@@ -11,7 +11,7 @@ const Pagination: React.FC<Props> = ({ total, setPage }) => {
       total={total}
       defaultValue={1}
       onChange={setPage}
-      className="mt-2"
+      className="my-5"
     >
       <Group gap={5} justify="center">
         <PaginationUI.First />
