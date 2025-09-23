@@ -8,13 +8,14 @@ export type ProjectCreate = {
 export type ProjectData = {
   id: string;
   creator: string;
-  created_ad: string;
+  created_at: string;
   count_participants: number;
   is_active: boolean;
   count_tasks: number;
   done_tasks: number;
   in_reviews_tasks: number;
   in_progress_tasks: number;
+  canceled_task: number;
   name: string;
 };
 

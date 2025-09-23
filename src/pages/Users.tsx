@@ -32,7 +32,7 @@ const Users = () => {
         <div>
           {isAdmin && <Register page={page} limit={limit} active={active} />}
 
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-end justify-between mb-2">
             {isAdmin && (
               <Button.Group>
                 <Button

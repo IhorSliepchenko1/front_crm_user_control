@@ -1,19 +1,103 @@
-import { useProjectAllQuery } from "@/app/services/projects/projectsApi";
+import { useAppSelector } from "@/app/hooks";
 import AddProject from "../components/AddProject";
+import { isAdminRole } from "@/app/features/authSlice";
+import { useState } from "react";
+import { useProjectAllQuery } from "@/app/services/projects/projectsApi";
+import Loader from "@/components/UI/Loader";
+import { Button, NativeSelect, Table } from "@mantine/core";
+import ProjectHeader from "@/components/tables/headers/ProjectHeader";
+import Pagination from "@/components/Pagination";
+import ProjectRows from "@/components/tables/rows/ProjectRows";
 
 const Projects = () => {
+  const isAdmin = useAppSelector(isAdminRole);
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(25);
+  const [active, setActive] = useState(true);
+  const [isMy, setIsMy] = useState(false);
+
   const { data, isLoading } = useProjectAllQuery({
-    page: 1,
-    limit: 10,
-    active: true,
+    page,
+    limit,
+    active,
+    ...(isAdmin && { my: isMy }),
   });
 
-  console.log(data?.data?.projects);
+  const total = data?.data?.count_pages ?? 1;
+  const projects = data?.data?.projects ?? [];
+
+  const changeActive = (args: boolean) => {
+    setActive(args);
+  };
 
   return (
-    <div>
-      <AddProject />
-    </div>
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div>
+          <AddProject page={page} limit={limit} active={active} />
+          <div className="flex items-end justify-between mb-2">
+            <div className="flex items-end gap-2">
+              {isAdmin && (
+                <NativeSelect
+                  label={"Проекты"}
+                  onChange={(event) =>
+                    setIsMy(event.currentTarget.value === "мои")
+                  }
+                  data={["все", "мои"]}
+                />
+              )}
+
+              <Button.Group>
+                <Button
+                  variant="light"
+                  color={active ? "green" : "gray"}
+                  onClick={() => changeActive(true)}
+                >
+                  active
+                </Button>
+                <Button
+                  variant="light"
+                  color={!active ? "red" : "gray"}
+                  onClick={() => changeActive(false)}
+                >
+                  blocked
+                </Button>
+              </Button.Group>
+            </div>
+            <NativeSelect
+              value={limit}
+              label={"К-во"}
+              onChange={(event) => setLimit(+event.currentTarget.value)}
+              data={["25", "50", "75", "100"]}
+            />
+          </div>
+
+          {projects.length < 1 ? (
+            <p className="text-center text-[20px]">
+              Отсутстуют проекты для показа
+            </p>
+          ) : (
+            <>
+              <Table striped highlightOnHover withTableBorder withColumnBorders>
+                <ProjectHeader />
+
+                <ProjectRows
+                  projects={projects}
+                  page={page}
+                  limit={limit}
+                  active={active}
+                  isMy={isMy}
+                  isAdmin={Boolean(isAdmin)}
+                />
+              </Table>
+              <Pagination total={total} setPage={setPage} />
+            </>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

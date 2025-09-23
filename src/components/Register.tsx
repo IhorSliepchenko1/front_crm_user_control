@@ -11,7 +11,8 @@ type RegisterFormData = {
   password: string;
   adminCode?: string;
 };
-
+// igor_admin_test
+// igor_user_test
 const Register: React.FC<Pagination> = ({ page, limit, active }) => {
   const form = useForm<RegisterFormData>({
     mode: "uncontrolled",
@@ -43,35 +44,33 @@ const Register: React.FC<Pagination> = ({ page, limit, active }) => {
   };
 
   return (
-    <>
-      <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-3">
-        <TextInput
-          {...form.getInputProps("login")}
-          key={form.key("login")}
-          label="Логин"
-          placeholder="логин пользователя"
-          required
-        />
-        <PasswordInput
-          label="Пароль"
-          placeholder="пароль пользователя"
-          key={form.key("password")}
-          {...form.getInputProps("password")}
-          required
-        />
+    <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-3">
+      <TextInput
+        {...form.getInputProps("login")}
+        key={form.key("login")}
+        label="Логин"
+        placeholder="логин пользователя"
+        required
+      />
+      <PasswordInput
+        label="Пароль"
+        placeholder="пароль пользователя"
+        key={form.key("password")}
+        {...form.getInputProps("password")}
+        required
+      />
 
-        <TextInput
-          {...form.getInputProps("adminCode")}
-          label="Админ код"
-          key={form.key("adminCode")}
-          placeholder="код администратора"
-        />
-        <Button type="submit" variant="outline">
-          Зарегистрировать
-        </Button>
-      </form>
+      <TextInput
+        {...form.getInputProps("adminCode")}
+        label="Админ код"
+        key={form.key("adminCode")}
+        placeholder="код администратора"
+      />
+      <Button type="submit" variant="outline">
+        Зарегистрировать
+      </Button>
       <Divider my="md" />
-    </>
+    </form>
   );
 };
 

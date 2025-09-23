@@ -4,14 +4,14 @@ import {
   useIsActiveUserMutation,
   useLazyGetUsersQuery,
 } from "@/app/services/user/userApi";
-import type { GetUserData } from "@/app/services/user/userTypes";
+import type { UserData } from "@/app/services/user/userTypes";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Anchor, Avatar, Badge, Button, Center, Table } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-  users: GetUserData[];
+  users: UserData[];
   page: number;
   limit: number;
   active: boolean;
@@ -76,9 +76,9 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
       <Table.Td>{user.creator_projects}</Table.Td>
       <Table.Td>{user.participant_projects}</Table.Td>
       <Table.Td>{user.count_tasks}</Table.Td>
-      <Table.Td>{user.done_tasks}</Table.Td>
-      <Table.Td>{user.in_reviews_tasks}</Table.Td>
       <Table.Td>{user.in_progress_tasks}</Table.Td>
+      <Table.Td>{user.in_reviews_tasks}</Table.Td>
+      <Table.Td>{user.done_tasks}</Table.Td>
       <Table.Td>{user.canceled_task}</Table.Td>
 
       <Table.Td>

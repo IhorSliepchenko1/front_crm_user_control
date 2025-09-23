@@ -4,7 +4,11 @@ export type ApiResponse<T = undefined> = {
   data?: T;
 };
 
-export type Pagination = { page: number; limit: number; active: boolean };
+export type Pagination = {
+  page: number;
+  limit: number;
+  active: boolean;
+};
 
 export type PageDetails = {
   total: number;

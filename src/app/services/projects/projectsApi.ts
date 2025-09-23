@@ -13,13 +13,12 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    // login: builder.mutation<ApiResponse, Login>({
-    //   query: (body) => ({
-    //     url: `/auth/login`,
-    //     method: METHODS.POST,
-    //     body,
-    //   }),
-    // }),
+    isActiveProject: builder.mutation<ApiResponse, string>({
+      query: (id) => ({
+        url: `/projects/is-active/${id}`,
+        method: METHODS.PATCH,
+      }),
+    }),
 
     // logoutMe: builder.mutation<ApiResponse, void>({
     //   query: () => ({
@@ -35,11 +34,14 @@ export const authApi = api.injectEndpoints({
     //   }),
     // }),
 
-    projectAll: builder.query<ApiResponse<GetProjectsData>, Pagination>({
-      query: ({ page, limit, active }) => ({
+    projectAll: builder.query<
+      ApiResponse<GetProjectsData>,
+      Pagination & { my?: boolean }
+    >({
+      query: ({ page, limit, active, my }) => ({
         url: `/projects/all`,
         method: METHODS.GET,
-        params: { page, limit, active },
+        params: { page, limit, active, my },
       }),
     }),
 
@@ -56,4 +58,5 @@ export const {
   useAddProjectMutation,
   useLazyProjectAllQuery,
   useProjectAllQuery,
+  useIsActiveProjectMutation,
 } = authApi;

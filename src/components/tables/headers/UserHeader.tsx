@@ -10,10 +10,10 @@ const UserHeader = ({ isAdmin }: { isAdmin: boolean }) => {
         <Table.Th>проекты</Table.Th>
         <Table.Th>участник проектов</Table.Th>
         <Table.Th>к-во задач</Table.Th>
-        <Table.Th>выполнено задач</Table.Th>
+        <Table.Th>задачи в процессе</Table.Th>
         <Table.Th>задачи на проверке</Table.Th>
-        <Table.Th>задачи в работе</Table.Th>
-        <Table.Th>отменёные задачи</Table.Th>
+        <Table.Th>выполнено задач</Table.Th>
+        <Table.Th>отменённые задачи</Table.Th>
         <Table.Th>роль</Table.Th>
         {isAdmin && <Table.Th>смена статуса</Table.Th>}
         {isAdmin && <Table.Th>вылогинить</Table.Th>}
