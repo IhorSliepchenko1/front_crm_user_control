@@ -5,9 +5,9 @@ import UserUpdateForm from "@/components/forms/UserUpdateForm";
 import Loader from "@/components/UI/Loader";
 import UserAvatar from "@/components/UI/UserAvatar";
 import UserData from "@/components/UserData";
-import { Divider, Title } from "@mantine/core";
+import { Divider } from "@mantine/core";
 import { useParams } from "react-router-dom";
-import PrevPage from "@/components/UI/PrevPage";
+import PageTitle from "@/components/UI/PageTitle";
 
 const User = () => {
   const { id } = useParams();
@@ -23,10 +23,7 @@ const User = () => {
         <Loader />
       ) : (
         <>
-          <div className="flex justify-between max-w-[500px] items-center">
-            <PrevPage />
-            <Title order={2}>Информация о пользователе</Title>
-          </div>
+          <PageTitle title="Информация о пользователе" />
           <div className="flex justify-start gap-10 py-10">
             <UserAvatar avatar={avatar} name={name} />
             <UserData userData={userData} />

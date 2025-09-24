@@ -5,10 +5,10 @@ import {
   useLazyGetUsersQuery,
 } from "@/app/services/user/userApi";
 import type { UserData } from "@/app/services/user/userTypes";
+import { useChangePage } from "@/hooks/useChangePage";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Anchor, Avatar, Badge, Button, Center, Table } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   users: UserData[];
@@ -25,12 +25,9 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
   const [isActive] = useIsActiveUserMutation();
   const [triggerUsers] = useLazyGetUsersQuery();
   const [logoutUserById] = useLogoutByIdMutation();
-  const navigate = useNavigate();
   const myName = useAppSelector((state) => state.auth.userData?.name);
 
-  const openUserPage = (id: string) => {
-    navigate(`user/${id}`);
-  };
+  const { changePage } = useChangePage();
 
   const changeStatus = async (id: string) => {
     try {
@@ -54,7 +51,10 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
 
   const rows = users.map((user) => (
     <Table.Tr key={user.id} className="text-[12px]">
-      <Table.Td onClick={() => openUserPage(user.id)} className="text-[8px]">
+      <Table.Td
+        onClick={() => changePage(user.id, "user")}
+        className="text-[8px]"
+      >
         <Anchor underline="hover">
           {user.name}
           <span className="text-[red]">

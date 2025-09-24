@@ -14,6 +14,7 @@ import Users from "./pages/Users.tsx";
 import Home from "./pages/Home.tsx";
 import Layout from "./components/layout/Layout.tsx";
 import Projects from "./pages/Projects.tsx";
+import Project from "./pages/Project.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,9 +27,10 @@ const router = createBrowserRouter([
         element: <Main />,
         children: [
           { path: "/", element: <Home /> },
-          { path: "/users", element: <Users /> },
+          { path: "users", element: <Users /> },
           { path: "users/user/:id", element: <User /> },
-          { path: "/projects", element: <Projects /> },
+          { path: "projects", element: <Projects /> },
+          { path: "projects/project/:id", element: <Project /> },
         ],
       },
     ],

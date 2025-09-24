@@ -1,7 +1,11 @@
 import { METHODS } from "@/utils/methods";
 import { api } from "../api";
 import type { ApiResponse, Pagination } from "@/types";
-import type { GetProjectsData, ProjectCreate } from "./projectsTypes";
+import type {
+  GetProjectsData,
+  ProjectByIdItem,
+  ProjectCreate,
+} from "./projectsTypes";
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,19 +24,26 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    // logoutMe: builder.mutation<ApiResponse, void>({
-    //   query: () => ({
-    //     url: `/auth/logout/me`,
-    //     method: METHODS.POST,
-    //   }),
-    // }),
+    changeParticipantsProject: builder.mutation<
+      ApiResponse,
+      { id: string; ids: string[]; key: "connect" | "disconnect" }
+    >({
+      query: ({ id, ids, key }) => ({
+        url: `/projects/participants/${id}`,
+        method: METHODS.PATCH,
+        body: { ids, key },
+      }),
+    }),
 
-    // logoutById: builder.mutation<ApiResponse, string>({
-    //   query: (id) => ({
-    //     url: `/auth/logout/${id}`,
-    //     method: METHODS.POST,
-    //   }),
-    // }),
+    projectById: builder.query<
+      ApiResponse<{ project: ProjectByIdItem }>,
+      string
+    >({
+      query: (id) => ({
+        url: `/projects/project/${id}`,
+        method: METHODS.GET,
+      }),
+    }),
 
     projectAll: builder.query<
       ApiResponse<GetProjectsData>,
@@ -59,4 +70,7 @@ export const {
   useLazyProjectAllQuery,
   useProjectAllQuery,
   useIsActiveProjectMutation,
+  useLazyProjectByIdQuery,
+  useProjectByIdQuery,
+  useChangeParticipantsProjectMutation,
 } = authApi;

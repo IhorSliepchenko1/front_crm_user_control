@@ -2,15 +2,15 @@ import {
   useIsActiveProjectMutation,
   useLazyProjectAllQuery,
 } from "@/app/services/projects/projectsApi";
-import type { ProjectData } from "@/app/services/projects/projectsTypes";
+import type { ProjectItem } from "@/app/services/projects/projectsTypes";
+import { useChangePage } from "@/hooks/useChangePage";
 
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Anchor, Avatar, Button, Center, Table } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
-  projects: ProjectData[];
+  projects: ProjectItem[];
   page: number;
   limit: number;
   active: boolean;
@@ -30,11 +30,8 @@ const ProjectRows: React.FC<Props> = ({
 
   const [isActive] = useIsActiveProjectMutation();
   const [triggerProjects] = useLazyProjectAllQuery();
-  const navigate = useNavigate();
 
-  const openProjectPage = (id: string) => {
-    navigate(`project/${id}`);
-  };
+  const { changePage } = useChangePage();
 
   const changeStatus = async (id: string) => {
     try {
@@ -54,10 +51,22 @@ const ProjectRows: React.FC<Props> = ({
   const rows = projects.map((project) => (
     <Table.Tr key={project.id} className="text-[12px]">
       <Table.Td className="text-[8px]">
-        <Anchor underline="hover">{project.name}</Anchor>
+        <Anchor
+          underline="hover"
+          onClick={() => changePage(project.id, "project")}
+        >
+          {project.name}
+        </Anchor>
       </Table.Td>
       <Table.Td>{project.created_at}</Table.Td>
-      <Table.Td>{project.creator}</Table.Td>
+      <Table.Td>
+        <Anchor
+          underline="hover"
+          onClick={() => changePage(project.creatorId, "/users/user")}
+        >
+          {project.creator}
+        </Anchor>
+      </Table.Td>
       <Table.Td>{project.count_participants}</Table.Td>
       <Table.Td>{project.count_tasks}</Table.Td>
       <Table.Td>{project.in_progress_tasks}</Table.Td>

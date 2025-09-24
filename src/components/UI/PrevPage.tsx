@@ -5,12 +5,8 @@ import { useNavigate } from "react-router-dom";
 const PrevPage = () => {
   const navigate = useNavigate();
   return (
-    <Button
-      onClick={() => navigate(-1)}
-      leftSection={<ArrowLeft size={14} />}
-      variant="default"
-    >
-      Назад
+    <Button onClick={() => navigate(-1)} variant="default">
+      <ArrowLeft size={14} />
     </Button>
   );
 };

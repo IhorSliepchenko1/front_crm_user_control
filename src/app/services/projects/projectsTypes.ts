@@ -5,8 +5,9 @@ export type ProjectCreate = {
   participants: string[];
 };
 
-export type ProjectData = {
+export type ProjectItem = {
   id: string;
+  creatorId: string;
   creator: string;
   created_at: string;
   count_participants: number;
@@ -20,5 +21,31 @@ export type ProjectData = {
 };
 
 export type GetProjectsData = {
-  projects: ProjectData[];
+  projects: ProjectItem[];
 } & PageDetails;
+
+enum TaskStatus {
+  IN_REVIEW,
+  IN_PROGRESS,
+  DONE,
+  CANCELED,
+}
+
+export type ProjectByIdItem = {
+  name: string;
+  creator: {
+    id: string;
+    login: string;
+  };
+  participants: { id: string; login: string }[];
+
+  tasks: {
+    id: string;
+    deadline: Date;
+    name: string;
+    status: TaskStatus;
+    executors: {
+      login: string;
+    }[];
+  }[];
+};
