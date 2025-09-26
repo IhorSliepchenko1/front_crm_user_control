@@ -1,4 +1,4 @@
-import { Avatar, Center, Stack, Tooltip, UnstyledButton } from "@mantine/core";
+import { Avatar, Center, Stack } from "@mantine/core";
 import classes from "./NavBar.module.scss";
 import { useAppSelector } from "@/app/hooks";
 import {
@@ -7,39 +7,20 @@ import {
 } from "@/app/services/auth/authApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { House, LogOut, Users, FolderKanban } from "lucide-react";
+import NavbarLink from "@/components/UI/NavbarLink/NavbarLink";
+import { useNotification } from "@/hooks/useNotification/useNotification";
+import { errorMessages } from "@/utils/is-error-message";
 
-interface NavbarLinkProps {
-  icon: typeof House;
-  label: string;
-  active?: boolean;
-  onClick?: () => void;
-  navigate?: string;
-}
-
-function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
-  return (
-    <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <UnstyledButton
-        onClick={onClick}
-        className={classes.link}
-        data-active={active || undefined}
-      >
-        <Icon size={20} />
-      </UnstyledButton>
-    </Tooltip>
-  );
-}
-
-const mockdata = [
-  { icon: House, label: "Домой", navigate: "/" },
-  { icon: Users, label: "Пользователи", navigate: "/users" },
-  { icon: FolderKanban , label: "Проекты", navigate: "/projects" },
-];
-
-export function NavBar() {
+const NavBar = () => {
   const url = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const mockdata = [
+    { icon: House, label: "Домой", navigate: "/" },
+    { icon: Users, label: "Пользователи", navigate: "/users" },
+    { icon: FolderKanban, label: "Проекты", navigate: "/projects" },
+  ];
 
   const links = mockdata.map((link) => (
     <NavbarLink
@@ -55,13 +36,16 @@ export function NavBar() {
   const { userData } = useAppSelector((state) => state.auth);
   const [logout] = useLogoutMeMutation();
   const [triggerMe] = useLazyGetMeQuery();
+  const { succeed, error } = useNotification();
+
   const logoutSession = async () => {
     try {
-      await logout().unwrap();
+      const { message } = await logout().unwrap();
       navigate("/login");
+      succeed(message);
       triggerMe();
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      error(errorMessages(err));
     }
   };
   return (
@@ -89,4 +73,6 @@ export function NavBar() {
       </span>
     </nav>
   );
-}
+};
+
+export default NavBar;

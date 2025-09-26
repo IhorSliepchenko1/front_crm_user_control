@@ -1,12 +1,12 @@
 import { useAppSelector } from "@/app/hooks";
-import AddProject from "../components/AddProject";
+import AddProject from "../components/forms/AddProject";
 import { isAdminRole } from "@/app/features/authSlice";
 import { useState } from "react";
 import { useProjectAllQuery } from "@/app/services/projects/projectsApi";
 import Loader from "@/components/UI/Loader";
 import { Button, NativeSelect, Table } from "@mantine/core";
 import ProjectHeader from "@/components/tables/headers/ProjectHeader";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/UI/Pagination";
 import ProjectRows from "@/components/tables/rows/ProjectRows";
 
 const Projects = () => {

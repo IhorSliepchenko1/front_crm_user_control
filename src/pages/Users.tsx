@@ -1,8 +1,8 @@
 import { isAdminRole } from "@/app/features/authSlice";
 import { useAppSelector } from "@/app/hooks";
 import { useGetUsersQuery } from "@/app/services/user/userApi";
-import Pagination from "@/components/Pagination";
-import Register from "@/components/Register";
+import Pagination from "@/components/UI/Pagination";
+import Register from "@/components/forms/Register";
 import UserHeader from "@/components/tables/headers/UserHeader";
 import UserRows from "@/components/tables/rows/UserRows";
 import Loader from "@/components/UI/Loader";

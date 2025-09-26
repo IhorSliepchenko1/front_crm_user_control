@@ -1,8 +1,8 @@
 import { useProjectByIdQuery } from "@/app/services/projects/projectsApi";
 import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
-import AddPartiants from "@/components/AddPartiants";
+import AddPartiants from "@/components/forms/AddPartiants";
 import RemovePartians from "@/components/forms/RemovePartians/RemovePartians";
-import ProjectData from "@/components/ProjectData";
+import ProjectData from "@/components/data/ProjectData";
 import Loader from "@/components/UI/Loader";
 import PageTitle from "@/components/UI/PageTitle";
 import { Divider, Title } from "@mantine/core";
