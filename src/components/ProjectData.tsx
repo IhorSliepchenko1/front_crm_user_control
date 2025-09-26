@@ -10,7 +10,9 @@ const ProjectData: React.FC<Props> = ({ projectInfo }) => {
           <div key={index} className="w-[300px] flex justify-between">
             <span>{item.title}:</span>
             <strong className={item.title === "Куратор" ? "border-b-1" : ""}>
-              {item.value}
+              {item.title === "К-во участников"
+                ? `${item.value} / 15`
+                : item.value}
             </strong>
           </div>
         ))}

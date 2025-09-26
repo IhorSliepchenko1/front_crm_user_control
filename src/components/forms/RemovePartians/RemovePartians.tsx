@@ -5,7 +5,6 @@ import {
 import style from "./RemovePartians.module.scss";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
-
 import { useForm } from "@mantine/form";
 import { Button, Checkbox } from "@mantine/core";
 import { useState } from "react";
@@ -55,30 +54,32 @@ const RemovePartians: React.FC<Props> = ({ projectId, partiants }) => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-5 mt-5">
-      <div className="grid grid-cols-3 gap-3">
-        {partiants.map((member) => (
-          <Checkbox
-            key={member.id}
-            classNames={style}
-            label={member.login}
-            defaultChecked
-            onChange={(event) => {
-              setArray(member.id, event.currentTarget.checked);
-            }}
-          />
-        ))}
-      </div>
+    partiants && (
+      <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-5 mt-5">
+        <div className="grid grid-cols-3 gap-3">
+          {partiants.map((member) => (
+            <Checkbox
+              key={member.id}
+              classNames={style}
+              label={member.login}
+              defaultChecked
+              onChange={(event) => {
+                setArray(member.id, event.currentTarget.checked);
+              }}
+            />
+          ))}
+        </div>
 
-      <Button
-        type="submit"
-        size="md"
-        variant="outline"
-        disabled={ids.length < 1}
-      >
-        Удалить из проекта
-      </Button>
-    </form>
+        <Button
+          type="submit"
+          size="md"
+          variant="outline"
+          disabled={ids.length < 1}
+        >
+          Удалить из проекта
+        </Button>
+      </form>
+    )
   );
 };
 
