@@ -56,12 +56,13 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    // refresh: builder.mutation<ApiResponse, void>({
-    //   query: () => ({
-    //     url: `/auth/refresh`,
-    //     method: METHODS.POST,
-    //   }),
-    // }),
+    renameProject: builder.mutation<ApiResponse, { name: string; id: string }>({
+      query: ({ name, id }) => ({
+        url: `/projects/rename/${id}`,
+        method: METHODS.PATCH,
+        body: { name },
+      }),
+    }),
   }),
 });
 
@@ -73,4 +74,5 @@ export const {
   useLazyProjectByIdQuery,
   useProjectByIdQuery,
   useChangeParticipantsProjectMutation,
+  useRenameProjectMutation,
 } = authApi;

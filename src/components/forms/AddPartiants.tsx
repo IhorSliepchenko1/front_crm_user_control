@@ -68,24 +68,31 @@ const AddPartiants: React.FC<Props> = ({ projectId, users }) => {
   };
 
   return (
-    <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-3">
-      <MultiSelect
-        {...form.getInputProps("participants")}
-        key={form.key("participants")}
-        label="Участники проекта"
-        placeholder="список участников"
-        data={arrayUserName}
-        onChange={(val) => {
-          setValue(val);
-        }}
-        searchable
-        required
-      />
+    <div>
+      <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-3">
+        <MultiSelect
+          {...form.getInputProps("participants")}
+          key={form.key("participants")}
+          label="Добавить участников"
+          placeholder="список участников"
+          data={arrayUserName}
+          onChange={(val) => {
+            setValue(val);
+          }}
+          searchable
+          required
+        />
 
-      <Button type="submit" variant="outline" color="green">
-        Добавить
-      </Button>
-    </form>
+        <Button
+          type="submit"
+          variant="outline"
+          color="green"
+          disabled={value.length === 0}
+        >
+          Добавить
+        </Button>
+      </form>
+    </div>
   );
 };
 

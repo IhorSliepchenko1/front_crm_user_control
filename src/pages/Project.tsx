@@ -6,7 +6,9 @@ import ProjectData from "@/components/data/ProjectData";
 import Loader from "@/components/UI/Loader";
 import PageTitle from "@/components/UI/PageTitle";
 import { Divider, Title } from "@mantine/core";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import RenameProject from "@/components/forms/RenameProject";
+import { useEffect } from "react";
 
 type Partiants = {
   id: string;
@@ -15,7 +17,15 @@ type Partiants = {
 
 const Project = () => {
   const { id } = useParams();
-  const { data, isLoading } = useProjectByIdQuery(id as string);
+  const { data, isLoading, isError } = useProjectByIdQuery(id as string);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isError) {
+      navigate(-1);
+    }
+  }, [isError]);
+
   const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
 
   const project = data?.data?.project;
@@ -40,8 +50,9 @@ const Project = () => {
   ) : (
     <>
       <PageTitle title={"Проект "} cursive={name} />
-      <div className="mt-10 flex gap-15">
+      <div className="mt-10 flex gap-5">
         <ProjectData projectInfo={projectInfo} />
+
         <Divider orientation="vertical" />
         <div>
           <Title order={4}>Участники</Title>
@@ -52,11 +63,13 @@ const Project = () => {
         </div>
         <Divider orientation="vertical" />
         <div className="w-[30%]">
-          <Title order={4}>Добавить участников</Title>
-          <AddPartiants
-            projectId={id as string}
-            users={removeCurentUsers as Partiants[]}
-          />
+          <div className="grid gap-4">
+            <AddPartiants
+              projectId={id as string}
+              users={removeCurentUsers as Partiants[]}
+            />
+            <RenameProject projectId={id as string} />
+          </div>
         </div>
       </div>
     </>

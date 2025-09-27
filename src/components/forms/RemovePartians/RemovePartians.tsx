@@ -16,7 +16,7 @@ type Props = {
     login: string;
   }[];
 };
-const RemovePartians: React.FC<Props> = ({ projectId, partiants }) => {
+const RemovePartians: React.FC<Props> = ({ projectId, partiants = [] }) => {
   const form = useForm({
     mode: "uncontrolled",
   });
@@ -25,14 +25,13 @@ const RemovePartians: React.FC<Props> = ({ projectId, partiants }) => {
   const [triggerProject] = useLazyProjectByIdQuery();
   const { succeed, error } = useNotification();
 
-  const [ids, setIds] = useState<Array<string>>([]);
+  const [toRemove, setToRemove] = useState<string[]>([]);
 
-  const setArray = (id: string, isAdd: boolean) => {
-    if (!isAdd) {
-      setIds((prev) => [...prev, id]);
+  const markForRemove = (id: string, keep: boolean) => {
+    if (!keep) {
+      setToRemove((prev) => [...prev, id]);
     } else {
-      const newArray = ids.filter((i) => i !== id);
-      setIds(newArray);
+      setToRemove((prev) => prev.filter((i) => i !== id));
     }
   };
 
@@ -40,46 +39,47 @@ const RemovePartians: React.FC<Props> = ({ projectId, partiants }) => {
     try {
       const { message } = await changeParticipants({
         id: projectId,
-        ids,
+        ids: toRemove,
         key: "disconnect",
       }).unwrap();
       await triggerProject(projectId).unwrap();
       form.reset();
-      setIds([]);
+      setToRemove([]);
       succeed(message);
     } catch (err) {
       form.reset();
+      setToRemove([]);
       error(errorMessages(err));
     }
   };
 
-  return (
-    partiants && (
-      <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-5 mt-5">
-        <div className="grid grid-cols-3 gap-3">
-          {partiants.map((member) => (
-            <Checkbox
-              key={member.id}
-              classNames={style}
-              label={member.login}
-              defaultChecked
-              onChange={(event) => {
-                setArray(member.id, event.currentTarget.checked);
-              }}
-            />
-          ))}
-        </div>
+  return partiants.length ? (
+    <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-5 mt-5">
+      <div className="grid max-h-[250px] xl:max-h-none overflow-y-auto xl:overflow-y-hidden  grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+        {partiants.map((member) => (
+          <Checkbox
+            key={member.id}
+            classNames={style}
+            label={member.login}
+            defaultChecked
+            onChange={(event) =>
+              markForRemove(member.id, event.currentTarget.checked)
+            }
+          />
+        ))}
+      </div>
 
-        <Button
-          type="submit"
-          size="md"
-          variant="outline"
-          disabled={ids.length < 1}
-        >
-          Удалить из проекта
-        </Button>
-      </form>
-    )
+      <Button
+        type="submit"
+        size="md"
+        variant="outline"
+        disabled={toRemove.length === 0}
+      >
+        Удалить из проекта
+      </Button>
+    </form>
+  ) : (
+    <p>данные не обнаружены</p>
   );
 };
 
