@@ -21,7 +21,6 @@ const url = import.meta.env.VITE_API_URL;
 
 const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
   const { succeed, error } = useNotification();
-
   const [isActive] = useIsActiveUserMutation();
   const [triggerUsers] = useLazyGetUsersQuery();
   const [logoutUserById] = useLogoutByIdMutation();

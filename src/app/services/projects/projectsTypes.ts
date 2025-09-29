@@ -24,13 +24,6 @@ export type GetProjectsData = {
   projects: ProjectItem[];
 } & PageDetails;
 
-enum TaskStatus {
-  IN_REVIEW,
-  IN_PROGRESS,
-  DONE,
-  CANCELED,
-}
-
 export type ProjectByIdItem = {
   name: string;
   creator: {
@@ -38,14 +31,5 @@ export type ProjectByIdItem = {
     login: string;
   };
   participants: { id: string; login: string }[];
-
-  tasks: {
-    id: string;
-    deadline: Date;
-    name: string;
-    status: TaskStatus;
-    executors: {
-      login: string;
-    }[];
-  }[];
+  count_task: number;
 };

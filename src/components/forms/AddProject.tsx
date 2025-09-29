@@ -19,9 +19,13 @@ type Props = {
   page: number;
   limit: number;
   active: boolean;
+  users: {
+    id: string;
+    login: string;
+  }[];
 };
 
-const AddProject: React.FC<Props> = ({ page, limit, active }) => {
+const AddProject: React.FC<Props> = ({ page, limit, active, users }) => {
   const [value, setValue] = useState<string[]>([]);
 
   const form = useForm<AddProjectFormData>({
@@ -42,17 +46,16 @@ const AddProject: React.FC<Props> = ({ page, limit, active }) => {
     },
   });
 
-  const { data: users, isLoading: usersLoading } = useGetUsersProjectQuery();
   const [addProject] = useAddProjectMutation();
   const [triggerProjects] = useLazyProjectAllQuery();
 
-  const arrayUserName = users?.data?.map((u) => u.login);
+  const arrayUserName = users.map((u) => u.login);
   const { succeed, error } = useNotification();
 
   const onSubmit = async (data: AddProjectFormData) => {
     try {
       const participants = value.map((n) => {
-        const userData = users?.data?.find((u) => {
+        const userData = users.find((u) => {
           if (u.login === n) return u;
         });
 
@@ -72,39 +75,33 @@ const AddProject: React.FC<Props> = ({ page, limit, active }) => {
   };
 
   return (
-    <>
-      {usersLoading ? (
-        <Loader />
-      ) : (
-        <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-3">
-          <TextInput
-            {...form.getInputProps("name")}
-            key={form.key("name")}
-            label="Название проекта"
-            placeholder="название"
-            required
-          />
+    <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-3">
+      <TextInput
+        {...form.getInputProps("name")}
+        key={form.key("name")}
+        label="Название проекта"
+        placeholder="название"
+        required
+      />
 
-          <MultiSelect
-            {...form.getInputProps("participants")}
-            key={form.key("participants")}
-            label="Участники проекта"
-            placeholder="список участников"
-            data={arrayUserName}
-            onChange={(val) => {
-              setValue(val);
-            }}
-            searchable
-            required
-          />
+      <MultiSelect
+        {...form.getInputProps("participants")}
+        key={form.key("participants")}
+        label="Участники проекта"
+        placeholder="список участников"
+        data={arrayUserName}
+        onChange={(val) => {
+          setValue(val);
+        }}
+        searchable
+        required
+      />
 
-          <Button type="submit" variant="outline" color="green">
-            Добавить проект
-          </Button>
-          <Divider my="md" />
-        </form>
-      )}
-    </>
+      <Button type="submit" variant="outline" color="green">
+        Добавить проект
+      </Button>
+      <Divider my="md" />
+    </form>
   );
 };
 

@@ -23,7 +23,7 @@ const User = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <>
+        <div>
           <PageTitle title="Информация о пользователе" />
           <UserMainInfo
             avatar={avatar}
@@ -33,7 +33,7 @@ const User = () => {
             isAdmin={isAdmin as boolean}
           />
           <Divider my="md" />
-        </>
+        </div>
       )}
     </>
   );

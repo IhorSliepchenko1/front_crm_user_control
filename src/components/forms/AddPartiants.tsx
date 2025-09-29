@@ -20,7 +20,7 @@ type Props = {
   }[];
 };
 
-const AddPartiants: React.FC<Props> = ({ projectId, users }) => {
+const AddPartiants: React.FC<Props> = ({ projectId, users = [] }) => {
   const form = useForm<AddPartiantsFormData>({
     mode: "uncontrolled",
     initialValues: {

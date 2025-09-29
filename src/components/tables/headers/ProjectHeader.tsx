@@ -1,19 +1,24 @@
 import { Table } from "@mantine/core";
 
 const ProjectHeader = () => {
+  const headerItem = [
+    "название",
+    "создан",
+    "создатель",
+    "к-во участников",
+    "к-во задач",
+    "задачи в процессе",
+    "задачи на проверке",
+    "выполненные задачи",
+    "отменённые задачи",
+    "смена статуса",
+  ];
   return (
     <Table.Thead className="text-[12px]">
       <Table.Tr>
-        <Table.Th>название</Table.Th>
-        <Table.Th>создан</Table.Th>
-        <Table.Th>создатель</Table.Th>
-        <Table.Th>к-во участников</Table.Th>
-        <Table.Th>к-во задач</Table.Th>
-        <Table.Th>задачи в процессе</Table.Th>
-        <Table.Th>задачи на проверке</Table.Th>
-        <Table.Th>выполненные задачи</Table.Th>
-        <Table.Th>отменённые задачи</Table.Th>
-        <Table.Th>смена статуса</Table.Th>
+        {headerItem.map((item) => (
+          <Table.Th>{item}</Table.Th>
+        ))}
       </Table.Tr>
     </Table.Thead>
   );

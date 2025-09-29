@@ -9,6 +9,7 @@ import ProjectHeader from "@/components/tables/headers/ProjectHeader";
 import Pagination from "@/components/UI/Pagination";
 import ProjectRows from "@/components/tables/rows/ProjectRows";
 import TableScrolContainer from "@/components/UI/TableScrolContainer";
+import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
 
 const Projects = () => {
   const isAdmin = useAppSelector(isAdminRole);
@@ -23,7 +24,7 @@ const Projects = () => {
     active,
     ...(isAdmin && { my: isMy }),
   });
-
+  const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
   const total = data?.data?.count_pages ?? 1;
   const projects = data?.data?.projects ?? [];
 
@@ -31,13 +32,25 @@ const Projects = () => {
     setActive(args);
   };
 
+  const isLoad = isLoadingUsers && isLoading;
+
   return (
     <>
-      {isLoading ? (
+      {isLoad ? (
         <Loader />
       ) : (
         <div>
-          <AddProject page={page} limit={limit} active={active} />
+          <AddProject
+            page={page}
+            limit={limit}
+            active={active}
+            users={
+              users?.data as {
+                id: string;
+                login: string;
+              }[]
+            }
+          />
           <div className="flex items-end justify-between mb-2">
             <div className="flex items-end gap-2">
               {isAdmin && (

@@ -1,20 +1,25 @@
 import { Table } from "@mantine/core";
 
 const UserHeader = ({ isAdmin }: { isAdmin: boolean }) => {
+  const headerItem = [
+    "имя",
+    "аватар",
+    "создан",
+    "проекты",
+    "участник проектов",
+    "к-во задач",
+    "задачи в процессе",
+    "задачи на проверке",
+    "выполнено задач",
+    "отменённые задачи",
+    "роль",
+  ];
   return (
     <Table.Thead className="text-[12px] sticky top-0">
       <Table.Tr>
-        <Table.Th>имя</Table.Th>
-        <Table.Th>аватар</Table.Th>
-        <Table.Th>создан</Table.Th>
-        <Table.Th>проекты</Table.Th>
-        <Table.Th>участник проектов</Table.Th>
-        <Table.Th>к-во задач</Table.Th>
-        <Table.Th>задачи в процессе</Table.Th>
-        <Table.Th>задачи на проверке</Table.Th>
-        <Table.Th>выполнено задач</Table.Th>
-        <Table.Th>отменённые задачи</Table.Th>
-        <Table.Th>роль</Table.Th>
+        {headerItem.map((item) => (
+          <Table.Th>{item}</Table.Th>
+        ))}
         {isAdmin && <Table.Th>смена статуса</Table.Th>}
         {isAdmin && <Table.Th>вылогинить</Table.Th>}
       </Table.Tr>

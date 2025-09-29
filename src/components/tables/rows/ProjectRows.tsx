@@ -7,7 +7,7 @@ import { useChangePage } from "@/hooks/useChangePage";
 
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
-import { Anchor, Avatar, Button, Center, Table } from "@mantine/core";
+import { Anchor, Button, Table } from "@mantine/core";
 
 type Props = {
   projects: ProjectItem[];
