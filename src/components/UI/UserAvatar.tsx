@@ -13,7 +13,7 @@ const UserAvatar: React.FC<Props> = ({ avatar, name }) => {
         <Avatar
           radius="xl"
           src={`${url}/${avatar}`}
-          style={{ width: 250, height: 400 }}
+          style={{ width: 200, height: 400 }}
         />
       ) : (
         <Avatar
@@ -21,7 +21,7 @@ const UserAvatar: React.FC<Props> = ({ avatar, name }) => {
           radius="xl"
           size="xl"
           name={name}
-          style={{ width: 250, height: 400 }}
+          style={{ width: 200, height: 400 }}
         />
       )}
     </span>

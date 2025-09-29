@@ -22,6 +22,8 @@ type Props = {
 };
 
 const AddProject: React.FC<Props> = ({ page, limit, active }) => {
+  const [value, setValue] = useState<string[]>([]);
+
   const form = useForm<AddProjectFormData>({
     mode: "uncontrolled",
     initialValues: {
@@ -33,8 +35,8 @@ const AddProject: React.FC<Props> = ({ page, limit, active }) => {
         { min: 5, max: 50 },
         "Название проекта должно быть минимум 5 символа"
       ),
-      participants: (value) =>
-        value.length < 1 && value.length > 15
+      participants: () =>
+        value.length < 1 || value.length > 15
           ? "К-во участников должно быть в пределах от 1 - 15"
           : null,
     },
@@ -46,7 +48,6 @@ const AddProject: React.FC<Props> = ({ page, limit, active }) => {
 
   const arrayUserName = users?.data?.map((u) => u.login);
   const { succeed, error } = useNotification();
-  const [value, setValue] = useState<string[]>([]);
 
   const onSubmit = async (data: AddProjectFormData) => {
     try {

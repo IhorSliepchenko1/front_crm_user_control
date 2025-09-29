@@ -7,7 +7,7 @@ const ProjectData: React.FC<Props> = ({ projectInfo }) => {
     <div>
       <div className="grid gap-3">
         {projectInfo.map((item, index) => (
-          <div key={index} className="w-[300px] flex justify-between">
+          <div key={index} className="w-[200px] xl:w-[300px] flex justify-between">
             <span>{item.title}:</span>
             <strong className={item.title === "Куратор" ? "border-b-1" : ""}>
               {item.title === "К-во участников"

@@ -2,7 +2,7 @@ import { Table } from "@mantine/core";
 
 const UserHeader = ({ isAdmin }: { isAdmin: boolean }) => {
   return (
-    <Table.Thead className="text-[12px]">
+    <Table.Thead className="text-[12px] sticky top-0">
       <Table.Tr>
         <Table.Th>имя</Table.Th>
         <Table.Th>аватар</Table.Th>

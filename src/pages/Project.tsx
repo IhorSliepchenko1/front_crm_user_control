@@ -50,19 +50,20 @@ const Project = () => {
   ) : (
     <>
       <PageTitle title={"Проект "} cursive={name} />
-      <div className="mt-10 flex gap-5">
+      <div className="mt-10 grid xl:flex gap-5">
+        <div className="flex gap-5">
         <ProjectData projectInfo={projectInfo} />
-
         <Divider orientation="vertical" />
-        <div>
-          <Title order={4}>Участники</Title>
-          <RemovePartians
-            projectId={id as string}
-            partiants={partiants as Partiants[]}
-          />
+          <div>
+            <Title order={4}>Участники</Title>
+            <RemovePartians
+              projectId={id as string}
+              partiants={partiants as Partiants[]}
+            />
+          </div>
         </div>
         <Divider orientation="vertical" />
-        <div className="w-[30%]">
+        <div className="xl:w-[30%]">
           <div className="grid gap-4">
             <AddPartiants
               projectId={id as string}

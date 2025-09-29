@@ -96,34 +96,15 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
   return (
     <div className="grid w-[100%]">
       <form onSubmit={form.onSubmit(onSubmit)}>
-        <Title order={3} className="flex items-center gap-2">
-          Редактировать <PencilLine />
-        </Title>
         <div className="grid gap-5 mt-2">
           <TextInput
             {...form.getInputProps("login")}
             key={form.key("login")}
-            label="Логин"
+            label="Новый логин"
             placeholder="логин"
-            size="md"
-          />
-          <PasswordInput
-            {...form.getInputProps("oldPassword")}
-            key={form.key("oldPassword")}
-            label="Текущий пароль"
-            placeholder="пароль"
-            size="md"
-          />
-
-          <PasswordInput
-            {...form.getInputProps("newPassword")}
-            key={form.key("newPassword")}
-            label="Новый пароль"
-            placeholder="пароль"
-            size="md"
           />
           <FileInput
-            label="Аватар"
+            label="Сменить логин"
             placeholder="загрузите файл"
             key={form.key("files")}
             {...form.getInputProps("files")}
@@ -132,14 +113,22 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
               form.setFieldValue("files", file);
             }}
           />
+          <PasswordInput
+            {...form.getInputProps("oldPassword")}
+            key={form.key("oldPassword")}
+            label="Текущий пароль"
+            placeholder="пароль"
+          />
+
+          <PasswordInput
+            {...form.getInputProps("newPassword")}
+            key={form.key("newPassword")}
+            label="Новый пароль"
+            placeholder="пароль"
+          />
         </div>
         <div className="mt-7 grid">
-          <Button
-            type="submit"
-            size="md"
-            variant="outline"
-            disabled={!form.isDirty()}
-          >
+          <Button type="submit" variant="outline" disabled={!form.isDirty()}>
             Сохранить
           </Button>
         </div>

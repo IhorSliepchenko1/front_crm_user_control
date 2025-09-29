@@ -10,7 +10,7 @@ const PageTitle: React.FC<Props> = ({ title, cursive }) => {
   return (
     <div className="flex gap-5">
       <PrevPage />
-      <Title order={2}>
+      <Title order={3}>
         {title}
         {cursive && <i>{cursive}</i>}
       </Title>

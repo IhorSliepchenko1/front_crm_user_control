@@ -105,8 +105,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
         <Table.Td>
           {
             <Button
-              variant="light"
-              color={"cyan"}
+              color={"dark"}
               size="xs"
               onClick={() => logoutUserByIdSession(user.id)}
               disabled={myName === user.name}

@@ -55,7 +55,7 @@ const RemovePartians: React.FC<Props> = ({ projectId, partiants = [] }) => {
 
   return partiants.length ? (
     <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-5 mt-5">
-      <div className="grid max-h-[250px] xl:max-h-none overflow-y-auto xl:overflow-y-hidden  grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+      <div className="grid max-h-[250px] xl:max-h-none overflow-y-auto xl:overflow-y-hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {partiants.map((member) => (
           <Checkbox
             key={member.id}

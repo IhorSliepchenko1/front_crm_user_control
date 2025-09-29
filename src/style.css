@@ -11,4 +11,11 @@ td > a {
     word-wrap: break-word;
 }
 
-
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+* ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: black;
+}

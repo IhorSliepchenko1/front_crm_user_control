@@ -11,7 +11,7 @@ const UserData: React.FC<Props> = ({ userData }) => {
   return (
     <div className="flex">
       <Divider size="sm" orientation="vertical" />
-      <div className="grid w-[500px] px-5">
+      <div className="grid w-[250px] xl:w-[500px] px-5">
         {userData.map(
           (user, index) =>
             user.title !== "id" &&

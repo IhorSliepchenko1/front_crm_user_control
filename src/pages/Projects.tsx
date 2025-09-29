@@ -8,6 +8,7 @@ import { Button, NativeSelect, Table } from "@mantine/core";
 import ProjectHeader from "@/components/tables/headers/ProjectHeader";
 import Pagination from "@/components/UI/Pagination";
 import ProjectRows from "@/components/tables/rows/ProjectRows";
+import TableScrolContainer from "@/components/UI/TableScrolContainer";
 
 const Projects = () => {
   const isAdmin = useAppSelector(isAdminRole);
@@ -80,18 +81,25 @@ const Projects = () => {
             </p>
           ) : (
             <>
-              <Table striped highlightOnHover withTableBorder withColumnBorders>
-                <ProjectHeader />
-
-                <ProjectRows
-                  projects={projects}
-                  page={page}
-                  limit={limit}
-                  active={active}
-                  isMy={isMy}
-                  isAdmin={Boolean(isAdmin)}
-                />
-              </Table>
+              <TableScrolContainer>
+                <Table
+                  striped
+                  highlightOnHover
+                  withTableBorder
+                  withColumnBorders
+                  className="min-w-[1300px]"
+                >
+                  <ProjectHeader />
+                  <ProjectRows
+                    projects={projects}
+                    page={page}
+                    limit={limit}
+                    active={active}
+                    isMy={isMy}
+                    isAdmin={Boolean(isAdmin)}
+                  />
+                </Table>
+              </TableScrolContainer>
               <Pagination total={total} setPage={setPage} />
             </>
           )}

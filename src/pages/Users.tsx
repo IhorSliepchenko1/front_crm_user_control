@@ -8,6 +8,7 @@ import UserRows from "@/components/tables/rows/UserRows";
 import Loader from "@/components/UI/Loader";
 import { Button, NativeSelect, Table } from "@mantine/core";
 import { useState } from "react";
+import TableScrolContainer from "@/components/UI/TableScrolContainer";
 
 const Users = () => {
   const isAdmin = useAppSelector(isAdminRole);
@@ -58,18 +59,24 @@ const Users = () => {
               data={["25", "50", "75", "100"]}
             />
           </div>
-
-          <Table striped highlightOnHover withTableBorder withColumnBorders>
-            <UserHeader isAdmin={Boolean(isAdmin)} />
-            <UserRows
-              users={users}
-              page={page}
-              limit={limit}
-              active={active}
-              isAdmin={Boolean(isAdmin)}
-            />
-          </Table>
-
+          <TableScrolContainer>
+            <Table
+              striped
+              highlightOnHover
+              withTableBorder
+              withColumnBorders
+              className="min-w-[1100px]"
+            >
+              <UserHeader isAdmin={Boolean(isAdmin)} />
+              <UserRows
+                users={users}
+                page={page}
+                limit={limit}
+                active={active}
+                isAdmin={Boolean(isAdmin)}
+              />
+            </Table>
+          </TableScrolContainer>
           <Pagination total={total} setPage={setPage} />
         </div>
       )}

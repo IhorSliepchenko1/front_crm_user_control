@@ -8,6 +8,7 @@ import UserData from "@/components/data/UserData";
 import { Divider } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import PageTitle from "@/components/UI/PageTitle";
+import UserMainInfo from "@/components/items/UserMainInfo";
 
 const User = () => {
   const { id } = useParams();
@@ -24,13 +25,13 @@ const User = () => {
       ) : (
         <>
           <PageTitle title="Информация о пользователе" />
-          <div className="flex justify-start gap-10 py-10">
-            <UserAvatar avatar={avatar} name={name} />
-            <UserData userData={userData} />
-            {isAdmin && (
-              <UserUpdateForm id={id as string} name={name as string} />
-            )}
-          </div>
+          <UserMainInfo
+            avatar={avatar}
+            name={name as string}
+            id={id as string}
+            userData={userData}
+            isAdmin={isAdmin as boolean}
+          />
           <Divider my="md" />
         </>
       )}
