@@ -5,41 +5,24 @@ import type { TaskByProjectId, TaskItem } from "./tasksTypes";
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    //   addProject: builder.mutation<ApiResponse, ProjectCreate>({
-    //     query: (body) => ({
-    //       url: `/projects/create`,
-    //       method: METHODS.POST,
-    //       body,
-    //     }),
-    //   }),
-
-    //   isActiveProject: builder.mutation<ApiResponse, string>({
-    //     query: (id) => ({
-    //       url: `/projects/is-active/${id}`,
-    //       method: METHODS.PATCH,
-    //     }),
-    //   }),
-
-    //   changeParticipantsProject: builder.mutation<
-    //     ApiResponse,
-    //     { id: string; ids: string[]; key: "connect" | "disconnect" }
-    //   >({
-    //     query: ({ id, ids, key }) => ({
-    //       url: `/projects/participants/${id}`,
-    //       method: METHODS.PATCH,
-    //       body: { ids, key },
-    //     }),
-    //   }),
-
-    //   projectById: builder.query<
-    //     ApiResponse<{ project: ProjectByIdItem }>,
-    //     string
-    //   >({
-    //     query: (id) => ({
-    //       url: `/projects/project/${id}`,
-    //       method: METHODS.GET,
-    //     }),
-    //   }),
+    addTask: builder.mutation<
+      ApiResponse,
+      {
+        projectId: string;
+        name: string;
+        deadline: string;
+        executors: string[];
+        // formData: FormData;
+        taskDescription?: string;
+      }
+    >({
+      query: ({ projectId, name, deadline, taskDescription, executors }) => ({
+        url: `/task/create`,
+        method: METHODS.POST,
+        body: { name, deadline, taskDescription, executors },
+        params: { projectId },
+      }),
+    }),
 
     taskByProjectId: builder.query<
       ApiResponse<{
@@ -64,15 +47,11 @@ export const authApi = api.injectEndpoints({
         params: { page, limit, status, deadlineFrom, deadlineTo, projectId },
       }),
     }),
-
-    // renameProject: builder.mutation<ApiResponse, { name: string; id: string }>({
-    //   query: ({ name, id }) => ({
-    //     url: `/projects/rename/${id}`,
-    //     method: METHODS.PATCH,
-    //     body: { name },
-    //   }),
-    // }),
   }),
 });
 
-export const { useLazyTaskByProjectIdQuery, useTaskByProjectIdQuery } = authApi;
+export const {
+  useLazyTaskByProjectIdQuery,
+  useTaskByProjectIdQuery,
+  useAddTaskMutation,
+} = authApi;

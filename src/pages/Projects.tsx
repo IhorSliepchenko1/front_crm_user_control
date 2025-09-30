@@ -11,6 +11,11 @@ import ProjectRows from "@/components/tables/rows/ProjectRows";
 import TableScrolContainer from "@/components/UI/TableScrolContainer";
 import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
 
+type Users = {
+  id: string;
+  login: string;
+}[];
+
 const Projects = () => {
   const isAdmin = useAppSelector(isAdminRole);
   const [page, setPage] = useState<number>(1);
@@ -44,25 +49,10 @@ const Projects = () => {
             page={page}
             limit={limit}
             active={active}
-            users={
-              users?.data as {
-                id: string;
-                login: string;
-              }[]
-            }
+            users={(users?.data as Users) ?? []}
           />
           <div className="flex items-end justify-between mb-2">
             <div className="flex items-end gap-2">
-              {isAdmin && (
-                <NativeSelect
-                  label={"Проекты"}
-                  onChange={(event) =>
-                    setIsMy(event.currentTarget.value === "мои")
-                  }
-                  data={["все", "мои"]}
-                />
-              )}
-
               <Button.Group>
                 <Button
                   variant="light"
@@ -80,12 +70,26 @@ const Projects = () => {
                 </Button>
               </Button.Group>
             </div>
-            <NativeSelect
-              value={limit}
-              label={"К-во"}
-              onChange={(event) => setLimit(+event.currentTarget.value)}
-              data={["25", "50", "75", "100"]}
-            />
+
+            <div className="flex items-end gap-2">
+              {isAdmin && (
+                <NativeSelect
+                  label={"Проекты"}
+                  onChange={(event) =>
+                    setIsMy(event.currentTarget.value === "мои")
+                  }
+                  size="xs"
+                  data={["все", "мои"]}
+                />
+              )}
+              <NativeSelect
+                value={limit}
+                label={"К-во"}
+                size="xs"
+                onChange={(event) => setLimit(+event.currentTarget.value)}
+                data={["25", "50", "75", "100"]}
+              />
+            </div>
           </div>
 
           {projects.length < 1 ? (

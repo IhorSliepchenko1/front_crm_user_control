@@ -2,8 +2,6 @@ import {
   useAddProjectMutation,
   useLazyProjectAllQuery,
 } from "@/app/services/projects/projectsApi";
-import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
-import Loader from "@/components/UI/Loader";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Button, Divider, MultiSelect, TextInput } from "@mantine/core";

@@ -13,6 +13,7 @@ import TaskData from "@/components/data/TaskData";
 import { useTaskByProjectIdQuery } from "@/app/services/tasks/tasksApi";
 import { useDisclosure } from "@mantine/hooks";
 import { DatePicker } from "@mantine/dates";
+import AddTask from "@/components/forms/AddTask";
 
 type Partiants = {
   id: string;
@@ -32,6 +33,7 @@ const Project = () => {
   ]);
 
   const [opened, { open, close }] = useDisclosure(false);
+  const [modal, setModal] = useState<"calendar" | "addTask" | null>(null);
 
   const fromToDate = useMemo(() => {
     if (value[0] !== null) {
@@ -53,15 +55,17 @@ const Project = () => {
   const { id } = useParams();
   const { data, isLoading, isError } = useProjectByIdQuery(id as string);
   const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
+  const projectQuery = {
+    page,
+    limit,
+    projectId: id as string,
+    status,
+    deadlineFrom: fromToDate.deadlineFrom,
+    deadlineTo: fromToDate.deadlineTo,
+  };
+
   const { data: tasksData, isLoading: isLoadingTasks } =
-    useTaskByProjectIdQuery({
-      page,
-      limit,
-      projectId: id as string,
-      status,
-      deadlineFrom: fromToDate.deadlineFrom,
-      deadlineTo: fromToDate.deadlineTo,
-    });
+    useTaskByProjectIdQuery(projectQuery);
 
   const tasks = tasksData?.data?.tasks ?? [];
   const total = tasksData?.data?.count_pages ?? 1;
@@ -122,12 +126,29 @@ const Project = () => {
         </div>
       </div>
       <Divider my="md" />
-      <Modal opened={opened} onClose={close} size="xs">
-        <div className="flex justify-center items-center">
-          <DatePicker type="range" value={value} onChange={setValue} />
-        </div>
-      </Modal>
+      {modal === "calendar" && (
+        <Modal opened={opened} onClose={close} size="xs">
+          <div className="flex justify-center items-center">
+            <DatePicker type="range" value={value} onChange={setValue} />
+          </div>
+        </Modal>
+      )}
+
+      {modal === "addTask" && (
+        <Modal
+          opened={opened}
+          onClose={close}
+          title="Заполните форму для назначения задачи"
+        >
+          <AddTask
+            projectQuery={projectQuery}
+            partiants={partiants as Partiants[]}
+            close={close}
+          />
+        </Modal>
+      )}
       <TaskData
+        setModal={setModal}
         tasks={tasks}
         total={total}
         page={page}
@@ -136,6 +157,7 @@ const Project = () => {
         setLimit={setLimit}
         setStatus={setStatus}
         open={open}
+        creatorName={creator as string}
       />
     </div>
   );

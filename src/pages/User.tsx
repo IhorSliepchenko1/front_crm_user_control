@@ -1,10 +1,7 @@
 import { isAdminRole } from "@/app/features/authSlice";
 import { useAppSelector } from "@/app/hooks";
 import { useUserByIdQuery } from "@/app/services/user/userApi";
-import UserUpdateForm from "@/components/forms/UserUpdateForm";
 import Loader from "@/components/UI/Loader";
-import UserAvatar from "@/components/UI/UserAvatar";
-import UserData from "@/components/data/UserData";
 import { Divider } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import PageTitle from "@/components/UI/PageTitle";

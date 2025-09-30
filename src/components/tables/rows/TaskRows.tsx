@@ -27,6 +27,16 @@ const TaskRows: React.FC<Props> = ({ tasks }) => {
     }
   };
 
+  const paintExpiredDeadline = (
+    dateTime: string,
+    status: "IN_REVIEW" | "IN_PROGRESS" | "DONE" | "CANCELED"
+  ) => {
+    const now = new Date();
+    const deadline = new Date(dateTime);
+
+    return deadline < now && status !== "CANCELED" && status !== "DONE";
+  };
+
   const rows = tasks.map((task, index) => (
     <Table.Tr key={index} className="text-[12px]">
       <Table.Td>{task.name}</Table.Td>
@@ -37,8 +47,12 @@ const TaskRows: React.FC<Props> = ({ tasks }) => {
         </Badge>
       </Table.Td>
       <Table.Td>{task.executors.map((l) => l.login).join(", ")}</Table.Td>
-      <Table.Td>
-        {new Date(task.deadline.replace("Z", "")).toLocaleString()}
+      <Table.Td
+        className={
+          paintExpiredDeadline(task.deadline, task.status) ? "text-red-500" : ""
+        }
+      >
+        {new Date(task.deadline).toLocaleString()}
       </Table.Td>
     </Table.Tr>
   ));

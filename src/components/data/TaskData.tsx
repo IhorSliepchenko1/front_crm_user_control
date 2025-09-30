@@ -4,6 +4,8 @@ import TaskRows from "../tables/rows/TaskRows";
 import type { TaskItem } from "@/app/services/tasks/tasksTypes";
 import { Button, NativeSelect, Table } from "@mantine/core";
 import Pagination from "../UI/Pagination";
+import { Plus } from "lucide-react";
+import { useAppSelector } from "@/app/hooks";
 
 type Props = {
   tasks: TaskItem[];
@@ -17,8 +19,9 @@ type Props = {
       "IN_PROGRESS" | "DONE" | "IN_REVIEW" | "CANCELED" | undefined
     >
   >;
-
+  setModal: React.Dispatch<React.SetStateAction<"calendar" | "addTask" | null>>;
   open: () => void;
+  creatorName: string;
 };
 
 const TaskData: React.FC<Props> = ({
@@ -29,6 +32,8 @@ const TaskData: React.FC<Props> = ({
   setLimit,
   setStatus,
   open,
+  setModal,
+  creatorName,
 }) => {
   const changeStatus = (value: string) => {
     switch (value) {
@@ -51,14 +56,20 @@ const TaskData: React.FC<Props> = ({
         return undefined;
     }
   };
+  const openModal = (modal: "calendar" | "addTask") => {
+    setModal(modal);
+    open();
+  };
+  const { userData } = useAppSelector((state) => state.auth);
 
   return (
     <div className="">
-      <div className="flex mb-5 justify-between items-center">
-        <div className="flex gap-10">
+      <div className="flex justify-between items-center">
+        <div className="flex mb-5 gap-4 items-end">
           <NativeSelect
             value={limit}
             label={"К-во"}
+            size="xs"
             onChange={(event) => setLimit(+event.currentTarget.value)}
             data={["25", "50", "75", "100"]}
           />
@@ -67,13 +78,27 @@ const TaskData: React.FC<Props> = ({
             onChange={(event) =>
               setStatus(changeStatus(event.currentTarget.value))
             }
+            size="xs"
             data={["все", "в процессе", "на проверке", "выполнено", "отменено"]}
           />
+          <Button
+            variant="default"
+            onClick={() => openModal("calendar")}
+            size="xs"
+          >
+            выбрать дату
+          </Button>
         </div>
-
-        <Button variant="default" onClick={open}>
-          выбрать дату
-        </Button>
+        {userData?.name === creatorName && (
+          <Button
+            leftSection={<Plus size={20} />}
+            color="teal"
+            onClick={() => openModal("addTask")}
+            size="xs"
+          >
+            Добавить
+          </Button>
+        )}
       </div>
       {tasks?.length ? (
         <TableScrolContainer>
@@ -89,7 +114,7 @@ const TaskData: React.FC<Props> = ({
           </Table>
         </TableScrolContainer>
       ) : (
-        <p className="text-center">Задачи ещё не назначены</p>
+        <p className="text-center">Данные отсутствуют</p>
       )}
       <Pagination total={total} setPage={setPage} />
     </div>

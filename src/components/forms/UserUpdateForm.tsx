@@ -5,15 +5,8 @@ import {
 } from "@/app/services/user/userApi";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
-import {
-  Button,
-  FileInput,
-  PasswordInput,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Button, FileInput, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { PencilLine } from "lucide-react";
 
 type UpdateUserFormData = {
   oldPassword?: string;

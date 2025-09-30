@@ -57,6 +57,7 @@ const Users = () => {
               label={"К-во"}
               onChange={(event) => setLimit(+event.currentTarget.value)}
               data={["25", "50", "75", "100"]}
+              size="xs"
             />
           </div>
           <TableScrolContainer>

@@ -40,38 +40,6 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    // renameUserById: builder.mutation<
-    //   ApiResponse,
-    //   { id: string; login: string }
-    // >({
-    //   query: ({ id, login }) => ({
-    //     url: `/users/rename/${id}`,
-    //     method: METHODS.PATCH,
-    //     body: { login },
-    //   }),
-    // }),
-
-    // changePasswodUserById: builder.mutation<
-    //   ApiResponse,
-    //   { id: string; newPassword: string; oldPassword: string }
-    // >({
-    //   query: ({ id, newPassword, oldPassword }) => ({
-    //     url: `/users/change-password/${id}`,
-    //     method: METHODS.PATCH,
-    //     body: { newPassword, oldPassword },
-    //   }),
-    // }),
-
-    // changeAvatarUserById: builder.mutation<ApiResponse, { files: Array<File> }>(
-    //   {
-    //     query: ({ files }) => ({
-    //       url: `/users/change-avatar`,
-    //       method: METHODS.PATCH,
-    //       body: { files },
-    //     }),
-    //   }
-    // ),
-
     updateUserById: builder.mutation<
       ApiResponse,
       {
