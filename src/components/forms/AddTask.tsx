@@ -23,7 +23,7 @@ type CreateTaskFormData = {
   files?: Array<File>;
 };
 
-type Partiants = {
+type Participants = {
   id: string;
   login: string;
 };
@@ -37,11 +37,11 @@ type Props = {
     deadlineFrom: string | undefined;
     deadlineTo: string | undefined;
   };
-  partiants: Array<Partiants>;
+  participants: Array<Participants>;
   close: () => void;
 };
 
-const AddTask: React.FC<Props> = ({ projectQuery, partiants, close }) => {
+const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
   const validateDeadline = (date: string) => {
     const now = new Date();
     const deadline = new Date(date);
@@ -84,7 +84,7 @@ const AddTask: React.FC<Props> = ({ projectQuery, partiants, close }) => {
   const { succeed, error } = useNotification();
   const [addTask] = useAddTaskMutation();
   const [triggerTasks] = useLazyTaskByProjectIdQuery();
-  const arrayUserName = partiants.map((p) => p.login);
+  const arrayUserName = participants.map((p) => p.login);
   const [value, setValue] = useState<string[]>([]);
 
   const onSubmit = async (data: CreateTaskFormData) => {
@@ -99,7 +99,7 @@ const AddTask: React.FC<Props> = ({ projectQuery, partiants, close }) => {
       }
 
       const executors = value.map((n) => {
-        const userData = partiants.find((u) => {
+        const userData = participants.find((u) => {
           if (u.login === n) return u;
         });
 

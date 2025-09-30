@@ -1,7 +1,5 @@
 import { useProjectByIdQuery } from "@/app/services/projects/projectsApi";
 import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
-import AddPartiants from "@/components/forms/AddPartiants";
-import RemovePartians from "@/components/forms/RemovePartians/RemovePartians";
 import ProjectData from "@/components/data/ProjectData";
 import Loader from "@/components/UI/Loader";
 import PageTitle from "@/components/UI/PageTitle";
@@ -14,8 +12,10 @@ import { useTaskByProjectIdQuery } from "@/app/services/tasks/tasksApi";
 import { useDisclosure } from "@mantine/hooks";
 import { DatePicker } from "@mantine/dates";
 import AddTask from "@/components/forms/AddTask";
+import RemoveParticipants from "@/components/forms/RemoveParticipants/RemoveParticipants";
+import AddParticipants from "@/components/forms/AddParticipants";
 
-type Partiants = {
+type Participants = {
   id: string;
   login: string;
 };
@@ -81,8 +81,8 @@ const Project = () => {
   const project = data?.data?.project;
   const name = project?.name;
   const creator = project?.creator.login;
-  const partiants = project?.participants;
-  const countParticipants = partiants?.length;
+  const participants = project?.participants;
+  const countParticipants = participants?.length;
   const countTasks = project?.count_task;
 
   const projectInfo = [
@@ -92,7 +92,7 @@ const Project = () => {
   ];
 
   const removeCurentUsers = users?.data?.filter((u) => {
-    return !partiants?.some((p) => p.id === u.id);
+    return !participants?.some((p) => p.id === u.id);
   });
 
   const isLoadData = isLoading && isLoadingUsers && isLoadingTasks;
@@ -108,18 +108,18 @@ const Project = () => {
           <Divider orientation="vertical" />
           <div>
             <Title order={4}>Участники</Title>
-            <RemovePartians
+            <RemoveParticipants
               projectId={id as string}
-              partiants={partiants as Partiants[]}
+              participants={participants as Participants[]}
             />
           </div>
         </div>
         <Divider orientation="vertical" />
         <div className="xl:w-[30%]">
           <div className="grid gap-4">
-            <AddPartiants
+            <AddParticipants
               projectId={id as string}
-              users={removeCurentUsers as Partiants[]}
+              users={removeCurentUsers as Participants[]}
             />
             <RenameProject projectId={id as string} />
           </div>
@@ -142,7 +142,7 @@ const Project = () => {
         >
           <AddTask
             projectQuery={projectQuery}
-            partiants={partiants as Partiants[]}
+            participants={participants as Participants[]}
             close={close}
           />
         </Modal>

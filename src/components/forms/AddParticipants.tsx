@@ -8,7 +8,7 @@ import { Button, MultiSelect } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 
-type AddPartiantsFormData = {
+type AddParticipantsFormData = {
   participants: Array<string>;
 };
 
@@ -20,8 +20,8 @@ type Props = {
   }[];
 };
 
-const AddPartiants: React.FC<Props> = ({ projectId, users = [] }) => {
-  const form = useForm<AddPartiantsFormData>({
+const AddParticipants: React.FC<Props> = ({ projectId, users = [] }) => {
+  const form = useForm<AddParticipantsFormData>({
     mode: "uncontrolled",
     initialValues: {
       participants: [],
@@ -96,4 +96,4 @@ const AddPartiants: React.FC<Props> = ({ projectId, users = [] }) => {
   );
 };
 
-export default AddPartiants;
+export default AddParticipants;

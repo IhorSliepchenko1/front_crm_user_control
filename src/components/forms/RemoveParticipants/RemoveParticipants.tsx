@@ -2,7 +2,7 @@ import {
   useChangeParticipantsProjectMutation,
   useLazyProjectByIdQuery,
 } from "@/app/services/projects/projectsApi";
-import style from "./RemovePartians.module.scss";
+import style from "./RemoveParticipants.module.scss";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { useForm } from "@mantine/form";
@@ -11,12 +11,12 @@ import { useState } from "react";
 
 type Props = {
   projectId: string;
-  partiants: {
+  participants: {
     id: string;
     login: string;
   }[];
 };
-const RemovePartians: React.FC<Props> = ({ projectId, partiants = [] }) => {
+const RemoveParticipants: React.FC<Props> = ({ projectId, participants = [] }) => {
   const form = useForm({
     mode: "uncontrolled",
   });
@@ -53,10 +53,10 @@ const RemovePartians: React.FC<Props> = ({ projectId, partiants = [] }) => {
     }
   };
 
-  return partiants.length ? (
+  return participants.length ? (
     <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-5 mt-5">
       <div className="grid max-h-[250px] xl:max-h-none overflow-y-auto xl:overflow-y-hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {partiants.map((member) => (
+        {participants.map((member) => (
           <Checkbox
             key={member.id}
             classNames={style}
@@ -83,4 +83,4 @@ const RemovePartians: React.FC<Props> = ({ projectId, partiants = [] }) => {
   );
 };
 
-export default RemovePartians;
+export default RemoveParticipants;
