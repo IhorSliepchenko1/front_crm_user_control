@@ -5,12 +5,8 @@ import { Button, Divider, PasswordInput, TextInput } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import type { Pagination } from "@/types";
+import type { Register as RegisterFormData } from "@/app/services/auth/authTypes";
 
-type RegisterFormData = {
-  login: string;
-  password: string;
-  adminCode?: string;
-};
 // igor_admin_test
 // igor_user_test
 const Register: React.FC<Pagination> = ({ page, limit, active }) => {
@@ -35,11 +31,11 @@ const Register: React.FC<Pagination> = ({ page, limit, active }) => {
     try {
       const { message } = await register(data).unwrap();
       await triggerUsers({ page, limit, active }).unwrap();
-      form.reset();
       succeed(message);
     } catch (err) {
-      form.reset();
       error(errorMessages(err));
+    } finally {
+      form.reset();
     }
   };
 

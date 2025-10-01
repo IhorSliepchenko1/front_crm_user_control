@@ -2,6 +2,8 @@ import {
   useChangeParticipantsProjectMutation,
   useLazyProjectByIdQuery,
 } from "@/app/services/projects/projectsApi";
+import type { User } from "@/app/services/user/userTypes";
+import { useExstractId } from "@/hooks/useExstractId";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Button, MultiSelect } from "@mantine/core";
@@ -14,10 +16,7 @@ type AddParticipantsFormData = {
 
 type Props = {
   projectId: string;
-  users: {
-    id: string;
-    login: string;
-  }[];
+  users: User[];
 };
 
 const AddParticipants: React.FC<Props> = ({ projectId, users = [] }) => {
@@ -41,15 +40,14 @@ const AddParticipants: React.FC<Props> = ({ projectId, users = [] }) => {
   const arrayUserName = users.map((u) => u.login);
   const [value, setValue] = useState<string[]>([]);
 
+  const { exstract } = useExstractId("login", "id");
+
   const onSubmit = async () => {
     try {
-      const ids = value.map((n) => {
-        const userData = users.find((u) => {
-          if (u.login === n) return u;
-        });
-
-        return userData?.id;
-      }) as string[];
+      const ids = exstract({
+        str: value,
+        obj: users,
+      });
 
       const { message } = await changeParticipants({
         id: projectId,
@@ -57,13 +55,12 @@ const AddParticipants: React.FC<Props> = ({ projectId, users = [] }) => {
         key: "connect",
       }).unwrap();
       await triggerProject(projectId).unwrap();
-      form.reset();
-      setValue([]);
       succeed(message);
     } catch (err) {
+      error(errorMessages(err));
+    } finally {
       form.reset();
       setValue([]);
-      error(errorMessages(err));
     }
   };
 

@@ -6,6 +6,8 @@ import { Button, NativeSelect, Table } from "@mantine/core";
 import Pagination from "../UI/Pagination";
 import { Plus } from "lucide-react";
 import { useAppSelector } from "@/app/hooks";
+import type { Status } from "@/app/services/projects/projectsTypes";
+import { useTranslateStatus } from "@/hooks/useTranslateStatus";
 
 type Props = {
   tasks: TaskItem[];
@@ -14,11 +16,7 @@ type Props = {
   limit: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   setLimit: React.Dispatch<React.SetStateAction<number>>;
-  setStatus: React.Dispatch<
-    React.SetStateAction<
-      "IN_PROGRESS" | "DONE" | "IN_REVIEW" | "CANCELED" | undefined
-    >
-  >;
+  setStatus: React.Dispatch<React.SetStateAction<Status | undefined>>;
   setModal: React.Dispatch<React.SetStateAction<"calendar" | "addTask" | null>>;
   open: () => void;
   creatorName: string;
@@ -35,27 +33,8 @@ const TaskData: React.FC<Props> = ({
   setModal,
   creatorName,
 }) => {
-  const changeStatus = (value: string) => {
-    switch (value) {
-      case "все":
-        return undefined;
+  const { translateToChange } = useTranslateStatus();
 
-      case "в процессе":
-        return "IN_PROGRESS";
-
-      case "выполнено":
-        return "DONE";
-
-      case "на проверке":
-        return "IN_REVIEW";
-
-      case "отменено":
-        return "CANCELED";
-
-      default:
-        return undefined;
-    }
-  };
   const openModal = (modal: "calendar" | "addTask") => {
     setModal(modal);
     open();
@@ -76,7 +55,7 @@ const TaskData: React.FC<Props> = ({
           <NativeSelect
             label={"Статус"}
             onChange={(event) =>
-              setStatus(changeStatus(event.currentTarget.value))
+              setStatus(translateToChange(event.currentTarget.value))
             }
             size="xs"
             data={["все", "в процессе", "на проверке", "выполнено", "отменено"]}

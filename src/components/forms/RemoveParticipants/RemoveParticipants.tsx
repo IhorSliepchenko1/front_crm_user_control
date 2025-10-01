@@ -8,15 +8,16 @@ import { errorMessages } from "@/utils/is-error-message";
 import { useForm } from "@mantine/form";
 import { Button, Checkbox } from "@mantine/core";
 import { useState } from "react";
+import type { User } from "@/app/services/user/userTypes";
 
 type Props = {
   projectId: string;
-  participants: {
-    id: string;
-    login: string;
-  }[];
+  participants: User[];
 };
-const RemoveParticipants: React.FC<Props> = ({ projectId, participants = [] }) => {
+const RemoveParticipants: React.FC<Props> = ({
+  projectId,
+  participants = [],
+}) => {
   const form = useForm({
     mode: "uncontrolled",
   });
@@ -43,19 +44,24 @@ const RemoveParticipants: React.FC<Props> = ({ projectId, participants = [] }) =
         key: "disconnect",
       }).unwrap();
       await triggerProject(projectId).unwrap();
-      form.reset();
-      setToRemove([]);
       succeed(message);
     } catch (err) {
+      error(errorMessages(err));
+    } finally {
       form.reset();
       setToRemove([]);
-      error(errorMessages(err));
     }
   };
 
   return participants.length ? (
     <form onSubmit={form.onSubmit(onSubmit)} className="grid gap-5 mt-5">
-      <div className="grid max-h-[250px] xl:max-h-none overflow-y-auto xl:overflow-y-hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div
+        className={`grid max-h-[250px] overflow-y-auto grid-cols-1 gap-3
+        xl:max-h-none
+        xl:overflow-y-hidden
+        md:grid-cols-2
+        lg:grid-cols-3`}
+      >
         {participants.map((member) => (
           <Checkbox
             key={member.id}

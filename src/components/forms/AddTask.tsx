@@ -14,6 +14,8 @@ import {
 } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { useState } from "react";
+import type { User } from "@/app/services/user/userTypes";
+import type { Status } from "@/app/services/projects/projectsTypes";
 
 type CreateTaskFormData = {
   name: string;
@@ -23,21 +25,18 @@ type CreateTaskFormData = {
   files?: Array<File>;
 };
 
-type Participants = {
-  id: string;
-  login: string;
+export type TProjectQuery = {
+  page: number;
+  limit: number;
+  projectId: string;
+  status: Status | undefined;
+  deadlineFrom: string | undefined;
+  deadlineTo: string | undefined;
 };
 
 type Props = {
-  projectQuery: {
-    page: number;
-    limit: number;
-    projectId: string;
-    status: "IN_REVIEW" | "IN_PROGRESS" | "DONE" | "CANCELED" | undefined;
-    deadlineFrom: string | undefined;
-    deadlineTo: string | undefined;
-  };
-  participants: Array<Participants>;
+  participants: Array<User>;
+  projectQuery: TProjectQuery;
   close: () => void;
 };
 

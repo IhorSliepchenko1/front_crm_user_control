@@ -3,74 +3,52 @@ import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
 import ProjectData from "@/components/data/ProjectData";
 import Loader from "@/components/UI/Loader";
 import PageTitle from "@/components/UI/PageTitle";
-import { Divider, Modal, Title } from "@mantine/core";
+import { Divider, Title } from "@mantine/core";
 import { useNavigate, useParams } from "react-router-dom";
 import RenameProject from "@/components/forms/RenameProject";
 import { useEffect, useMemo, useState } from "react";
 import TaskData from "@/components/data/TaskData";
 import { useTaskByProjectIdQuery } from "@/app/services/tasks/tasksApi";
 import { useDisclosure } from "@mantine/hooks";
-import { DatePicker } from "@mantine/dates";
-import AddTask from "@/components/forms/AddTask";
 import RemoveParticipants from "@/components/forms/RemoveParticipants/RemoveParticipants";
 import AddParticipants from "@/components/forms/AddParticipants";
-
-type Participants = {
-  id: string;
-  login: string;
-};
+import type { Status } from "@/app/services/projects/projectsTypes";
+import type { TModal, Value } from "@/components/modals/CalendarModal";
+import CalendarModal from "@/components/modals/CalendarModal";
+import type { User } from "@/app/services/user/userTypes";
+import AddTaskModal from "@/components/modals/AddTaskModal";
+import { useFromToDate } from "@/hooks/useFromToDate";
 
 const Project = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(25);
-  const [status, setStatus] = useState<
-    "IN_REVIEW" | "IN_PROGRESS" | "DONE" | "CANCELED" | undefined
-  >(undefined);
-
-  const [value, setValue] = useState<[string | null, string | null]>([
-    null,
-    null,
-  ]);
+  const [status, setStatus] = useState<Status | undefined>(undefined);
+  const [value, setValue] = useState<Value>([null, null]);
+  const [modal, setModal] = useState<TModal>(null);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [modal, setModal] = useState<"calendar" | "addTask" | null>(null);
 
-  const fromToDate = useMemo(() => {
-    if (value[0] !== null) {
-      const [start, end] = value;
+  const { deadlineFrom, deadlineTo } = useFromToDate(value);
 
-      const deadlineFrom = start ? `${start}T00:00:00.000Z` : undefined;
-      const deadlineTo = end
-        ? `${end}T23:59:59.000Z`
-        : !end && start
-        ? `${start}T00:00:00.000Z`
-        : undefined;
-
-      return { deadlineFrom, deadlineTo };
-    }
-
-    return { deadlineFrom: undefined, deadlineTo: undefined };
-  }, [value]);
-
-  const { id } = useParams();
-  const { data, isLoading, isError } = useProjectByIdQuery(id as string);
-  const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
   const projectQuery = {
     page,
     limit,
     projectId: id as string,
     status,
-    deadlineFrom: fromToDate.deadlineFrom,
-    deadlineTo: fromToDate.deadlineTo,
+    deadlineFrom,
+    deadlineTo,
   };
 
+  const { data, isLoading, isError } = useProjectByIdQuery(id as string);
+  const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
   const { data: tasksData, isLoading: isLoadingTasks } =
     useTaskByProjectIdQuery(projectQuery);
 
   const tasks = tasksData?.data?.tasks ?? [];
   const total = tasksData?.data?.count_pages ?? 1;
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (isError) {
@@ -78,17 +56,36 @@ const Project = () => {
     }
   }, [isError]);
 
-  const project = data?.data?.project;
-  const name = project?.name;
-  const creator = project?.creator.login;
-  const participants = project?.participants;
-  const countParticipants = participants?.length;
-  const countTasks = project?.count_task;
+  const projectData = useMemo(() => {
+    if (data && data.data) {
+      const { project } = data.data;
+      const { participants, name, count_task, creator } = project;
+
+      return {
+        participants,
+        name,
+        countTasks: count_task,
+        creator: creator.login,
+        countParticipants: participants.length,
+      };
+    }
+
+    return {
+      participants: [],
+      name: "",
+      countTasks: 0,
+      creator: "",
+      countParticipants: 0,
+    };
+  }, [isLoading, data]);
+
+  const { participants, name, countTasks, creator, countParticipants } =
+    projectData;
 
   const projectInfo = [
-    { title: "Куратор", value: creator ?? "" },
-    { title: "К-во участников", value: countParticipants ?? 0 },
-    { title: "К-во задач", value: countTasks ?? 0 },
+    { title: "Куратор", value: creator },
+    { title: "К-во участников", value: countParticipants },
+    { title: "К-во задач", value: countTasks },
   ];
 
   const removeCurentUsers = users?.data?.filter((u) => {
@@ -110,43 +107,24 @@ const Project = () => {
             <Title order={4}>Участники</Title>
             <RemoveParticipants
               projectId={id as string}
-              participants={participants as Participants[]}
+              participants={participants}
             />
           </div>
         </div>
         <Divider orientation="vertical" />
+
         <div className="xl:w-[30%]">
           <div className="grid gap-4">
             <AddParticipants
               projectId={id as string}
-              users={removeCurentUsers as Participants[]}
+              users={removeCurentUsers as User[]}
             />
             <RenameProject projectId={id as string} />
           </div>
         </div>
       </div>
-      <Divider my="md" />
-      {modal === "calendar" && (
-        <Modal opened={opened} onClose={close} size="xs">
-          <div className="flex justify-center items-center">
-            <DatePicker type="range" value={value} onChange={setValue} />
-          </div>
-        </Modal>
-      )}
 
-      {modal === "addTask" && (
-        <Modal
-          opened={opened}
-          onClose={close}
-          title="Заполните форму для назначения задачи"
-        >
-          <AddTask
-            projectQuery={projectQuery}
-            participants={participants as Participants[]}
-            close={close}
-          />
-        </Modal>
-      )}
+      <Divider my="md" />
       <TaskData
         setModal={setModal}
         tasks={tasks}
@@ -158,6 +136,21 @@ const Project = () => {
         setStatus={setStatus}
         open={open}
         creatorName={creator as string}
+      />
+      <CalendarModal
+        modal={modal}
+        value={value}
+        setValue={setValue}
+        opened={opened}
+        close={close}
+      />
+
+      <AddTaskModal
+        modal={modal}
+        opened={opened}
+        close={close}
+        projectQuery={projectQuery}
+        participants={participants}
       />
     </div>
   );

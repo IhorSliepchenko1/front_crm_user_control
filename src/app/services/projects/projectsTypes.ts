@@ -33,3 +33,5 @@ export type ProjectByIdItem = {
   participants: { id: string; login: string }[];
   count_task: number;
 };
+
+export type Status = "IN_REVIEW" | "IN_PROGRESS" | "DONE" | "CANCELED";

@@ -22,17 +22,6 @@ const NavBar = () => {
     { icon: FolderKanban, label: "Проекты", navigate: "/projects" },
   ];
 
-  const links = mockdata.map((link) => (
-    <NavbarLink
-      {...link}
-      key={link.label}
-      active={pathname === link.navigate}
-      onClick={() => {
-        navigate(link.navigate as string);
-      }}
-    />
-  ));
-
   const { userData } = useAppSelector((state) => state.auth);
   const [logout] = useLogoutMeMutation();
   const [triggerMe] = useLazyGetMeQuery();
@@ -61,7 +50,16 @@ const NavBar = () => {
       <div className={classes.navbarMain}>
         <span className="flex justify-center">
           <Stack justify="center" gap={5}>
-            {links}
+            {mockdata.map((link) => (
+              <NavbarLink
+                {...link}
+                key={link.label}
+                active={pathname === link.navigate}
+                onClick={() => {
+                  navigate(link.navigate as string);
+                }}
+              />
+            ))}
           </Stack>
         </span>
       </div>

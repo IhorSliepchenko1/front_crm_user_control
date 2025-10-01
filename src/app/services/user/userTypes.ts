@@ -19,3 +19,15 @@ export type UserData = {
 export type GetUsersData = {
   users: UserData[];
 } & PageDetails;
+
+export type User = {
+  id: string;
+  login: string;
+};
+
+export type UpdateUser = {
+  oldPassword?: string;
+  newPassword?: string;
+  login?: string;
+  files?: Array<File>;
+};

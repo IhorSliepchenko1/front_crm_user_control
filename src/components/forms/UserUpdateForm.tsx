@@ -3,17 +3,11 @@ import {
   useLazyUserByIdQuery,
   useUpdateUserByIdMutation,
 } from "@/app/services/user/userApi";
+import type { UpdateUser } from "@/app/services/user/userTypes";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Button, FileInput, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-
-type UpdateUserFormData = {
-  oldPassword?: string;
-  newPassword?: string;
-  login?: string;
-  files?: Array<File>;
-};
 
 type Props = {
   id: string;
@@ -21,7 +15,7 @@ type Props = {
 };
 
 const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
-  const form = useForm<UpdateUserFormData>({
+  const form = useForm<UpdateUser>({
     mode: "uncontrolled",
     initialValues: {
       login: "",
@@ -59,7 +53,7 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
   const [triggerMe] = useLazyGetMeQuery();
   const { succeed, error } = useNotification();
 
-  const onSubmit = async (data: UpdateUserFormData) => {
+  const onSubmit = async (data: UpdateUser) => {
     try {
       const { login, newPassword, oldPassword, files } = data;
 
@@ -78,11 +72,11 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
       const { message } = await userUpdate({ id, formData }).unwrap();
       await triggerUser(id).unwrap();
       await triggerMe().unwrap();
-      form.reset();
       succeed(message);
     } catch (err) {
-      form.reset();
       error(errorMessages(err));
+    } finally {
+      form.reset();
     }
   };
 

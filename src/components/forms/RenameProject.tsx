@@ -40,11 +40,11 @@ const RenameProject: React.FC<Props> = ({ projectId }) => {
         id: projectId,
       }).unwrap();
       await triggerProject(projectId).unwrap();
-      form.reset();
       succeed(message);
     } catch (err) {
-      form.reset();
       error(errorMessages(err));
+    } finally {
+      form.reset();
     }
   };
 

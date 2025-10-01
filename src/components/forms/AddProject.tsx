@@ -2,6 +2,8 @@ import {
   useAddProjectMutation,
   useLazyProjectAllQuery,
 } from "@/app/services/projects/projectsApi";
+import type { User } from "@/app/services/user/userTypes";
+import { useExstractId } from "@/hooks/useExstractId";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Button, Divider, MultiSelect, TextInput } from "@mantine/core";
@@ -17,10 +19,7 @@ type Props = {
   page: number;
   limit: number;
   active: boolean;
-  users: {
-    id: string;
-    login: string;
-  }[];
+  users: User[];
 };
 
 const AddProject: React.FC<Props> = ({ page, limit, active, users }) => {
@@ -49,26 +48,23 @@ const AddProject: React.FC<Props> = ({ page, limit, active, users }) => {
 
   const arrayUserName = users.map((u) => u.login);
   const { succeed, error } = useNotification();
+  const { exstract } = useExstractId("login", "id");
 
   const onSubmit = async (data: AddProjectFormData) => {
     try {
-      const participants = value.map((n) => {
-        const userData = users.find((u) => {
-          if (u.login === n) return u;
-        });
-
-        return userData?.id;
-      }) as string[];
+      const participants = exstract({
+        str: value,
+        obj: users,
+      });
 
       const { message } = await addProject({ ...data, participants }).unwrap();
       await triggerProjects({ page, limit, active }).unwrap();
-      form.reset();
-      setValue([]);
       succeed(message);
     } catch (err) {
+      error(errorMessages(err));
+    } finally {
       form.reset();
       setValue([]);
-      error(errorMessages(err));
     }
   };
 

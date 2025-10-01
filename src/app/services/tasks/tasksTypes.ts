@@ -1,7 +1,9 @@
+import type { Status } from "../projects/projectsTypes";
+
 export type TaskByProjectId = {
   page: number;
   limit: number;
-  status?: "IN_REVIEW" | "IN_PROGRESS" | "DONE" | "CANCELED" | "ALL";
+  status?: Status;
   deadlineFrom?: string;
   deadlineTo?: string;
   projectId: string;
@@ -12,6 +14,5 @@ export type TaskItem = {
   deadline: string;
   executors: { login: string }[];
   name: string;
-  status: "IN_REVIEW" | "IN_PROGRESS" | "DONE" | "CANCELED";
+  status: Status;
 };
-// b9e62b34-6437-4e7f-abb7-bdcf92513b5e

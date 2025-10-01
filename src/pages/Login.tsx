@@ -37,12 +37,12 @@ const Login = () => {
     try {
       const { message } = await login(data).unwrap();
       await triggerMe().unwrap();
-      form.reset();
       navigate("/");
       succeed(message);
     } catch (err) {
-      form.reset();
       error(errorMessages(err));
+    } finally {
+      form.reset();
     }
   };
 
