@@ -10,6 +10,7 @@ export type TaskByProjectId = {
 };
 
 export type TaskItem = {
+  id: string;
   createdAt: string;
   deadline: string;
   executors: { login: string }[];

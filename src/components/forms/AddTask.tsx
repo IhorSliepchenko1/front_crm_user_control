@@ -38,6 +38,7 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
     const deadline = new Date(date);
     return now > deadline;
   };
+  const [value, setValue] = useState<string[]>([]);
 
   const form = useForm<CreateTaskFormData>({
     mode: "uncontrolled",
@@ -64,6 +65,11 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
           ? "Длина описания задачи не может превышать 2500 символов!"
           : null,
 
+      executors: () =>
+        value.length < 1 || value.length > 5
+          ? "К-во участников должно быть в пределах от 1 - 5"
+          : null,
+
       files: (value) =>
         value && value.some((f) => f.size > 5 * 1024 * 1024)
           ? "Максимальный размер файла 5МБ!"
@@ -72,11 +78,12 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
           : null,
     },
   });
+  console.log(value);
+
   const { succeed, error } = useNotification();
   const [addTask] = useAddTaskMutation();
   const [triggerTasks] = useLazyTaskByProjectIdQuery();
   const arrayUserName = participants.map((p) => p.login);
-  const [value, setValue] = useState<string[]>([]);
   const { exstract } = useExstractId("login", "id");
 
   const onSubmit = async (data: CreateTaskFormData) => {
@@ -86,6 +93,7 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
         str: value,
         obj: participants,
       });
+      console.log(executors);
 
       const formData = new FormData();
 

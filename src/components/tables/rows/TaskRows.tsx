@@ -1,13 +1,15 @@
 import type { Status } from "@/app/services/projects/projectsTypes";
 import type { TaskItem } from "@/app/services/tasks/tasksTypes";
+import { useChangePage } from "@/hooks/useChangePage";
 import { useTranslateStatus } from "@/hooks/useTranslateStatus";
-import { Badge, Table } from "@mantine/core";
+import { Anchor, Badge, Table } from "@mantine/core";
 
 type Props = {
   tasks: TaskItem[];
 };
 
 const TaskRows: React.FC<Props> = ({ tasks }) => {
+  const { changePage } = useChangePage();
   const { translateToRender } = useTranslateStatus();
 
   const paintExpiredDeadline = (dateTime: string, status: Status) => {
@@ -19,7 +21,11 @@ const TaskRows: React.FC<Props> = ({ tasks }) => {
 
   const rows = tasks.map((task, index) => (
     <Table.Tr key={index} className="text-[12px]">
-      <Table.Td>{task.name}</Table.Td>
+      <Table.Td>
+        <Anchor onClick={() => changePage(task.id, "/task")}>
+          {task.name}
+        </Anchor>
+      </Table.Td>
       <Table.Td>{new Date(task.createdAt).toLocaleDateString()}</Table.Td>
       <Table.Td>
         <Badge color={translateToRender(task.status).color}>

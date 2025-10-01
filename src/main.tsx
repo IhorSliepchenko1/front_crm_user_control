@@ -16,6 +16,7 @@ import Home from "./pages/Home.tsx";
 import Layout from "./components/layout/Layout.tsx";
 import Projects from "./pages/Projects.tsx";
 import Project from "./pages/Project.tsx";
+import Task from "./pages/Task.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
           { path: "users/user/:id", element: <User /> },
           { path: "projects", element: <Projects /> },
           { path: "projects/project/:id", element: <Project /> },
+          { path: "/task/:id", element: <Task /> },
         ],
       },
     ],

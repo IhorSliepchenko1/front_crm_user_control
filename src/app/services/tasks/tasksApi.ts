@@ -33,6 +33,13 @@ export const authApi = api.injectEndpoints({
         params: query,
       }),
     }),
+
+    taskById: builder.query({
+      query: (id) => ({
+        url: `/task/${id}`,
+        method: METHODS.GET,
+      }),
+    }),
   }),
 });
 
@@ -40,4 +47,6 @@ export const {
   useLazyTaskByProjectIdQuery,
   useTaskByProjectIdQuery,
   useAddTaskMutation,
+  useLazyTaskByIdQuery,
+  useTaskByIdQuery,
 } = authApi;

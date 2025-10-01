@@ -89,7 +89,7 @@ const TaskData: React.FC<Props> = ({
             className="min-w-[1300px]"
           >
             <TaskHeader />
-            <TaskRows tasks={tasks as TaskItem[]} />
+            <TaskRows tasks={tasks} />
           </Table>
         </TableScrolContainer>
       ) : (
