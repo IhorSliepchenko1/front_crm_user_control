@@ -91,7 +91,8 @@ const UserUpdateForm: React.FC<Props> = ({ id, name }) => {
             placeholder="логин"
           />
           <FileInput
-            label="Сменить логин"
+            label="Сменить аватар"
+            size='sm'
             placeholder="загрузите файл"
             key={form.key("files")}
             {...form.getInputProps("files")}

@@ -17,7 +17,7 @@ const ProjectHeader = () => {
     <Table.Thead className="text-[12px]">
       <Table.Tr>
         {headerItem.map((item) => (
-          <Table.Th>{item}</Table.Th>
+          <Table.Th key={item}>{item}</Table.Th>
         ))}
       </Table.Tr>
     </Table.Thead>

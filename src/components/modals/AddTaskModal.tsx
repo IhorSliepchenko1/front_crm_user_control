@@ -1,9 +1,8 @@
 import { Modal } from "@mantine/core";
-import AddTask, { type TProjectQuery } from "../forms/AddTask";
+import AddTask from "../forms/AddTask";
 import type { User } from "@/app/services/user/userTypes";
-
-export type Value = [string | null, string | null];
-export type TModal = "calendar" | "addTask" | null;
+import type { TModal } from "@/app/services/tasks/tasksTypes";
+import type { TProjectQuery } from "@/app/services/projects/projectsTypes";
 
 type Props = {
   modal: TModal;
@@ -25,6 +24,7 @@ const AddTaskModal: React.FC<Props> = ({
       <Modal
         opened={opened}
         onClose={close}
+        size="xl"
         title="Заполните форму для назначения задачи"
       >
         <AddTask

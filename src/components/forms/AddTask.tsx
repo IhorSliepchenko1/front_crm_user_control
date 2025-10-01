@@ -15,27 +15,19 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import { useState } from "react";
 import type { User } from "@/app/services/user/userTypes";
-import type { Status } from "@/app/services/projects/projectsTypes";
+import type { TProjectQuery } from "@/app/services/projects/projectsTypes";
+import { useExstractId } from "@/hooks/useExstractId";
 
 type CreateTaskFormData = {
   name: string;
   deadline: string;
   taskDescription?: string;
-  executors: Array<string>;
+  executors: string[];
   files?: Array<File>;
 };
 
-export type TProjectQuery = {
-  page: number;
-  limit: number;
-  projectId: string;
-  status: Status | undefined;
-  deadlineFrom: string | undefined;
-  deadlineTo: string | undefined;
-};
-
 type Props = {
-  participants: Array<User>;
+  participants: User[];
   projectQuery: TProjectQuery;
   close: () => void;
 };
@@ -85,32 +77,31 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
   const [triggerTasks] = useLazyTaskByProjectIdQuery();
   const arrayUserName = participants.map((p) => p.login);
   const [value, setValue] = useState<string[]>([]);
+  const { exstract } = useExstractId("login", "id");
 
   const onSubmit = async (data: CreateTaskFormData) => {
     try {
       const { name, deadline, taskDescription, files } = data;
+      const executors = exstract({
+        str: value,
+        obj: participants,
+      });
+
       const formData = new FormData();
 
-      if (files && files.length > 0) {
+      formData.append("name", name);
+      formData.append("deadline", `${deadline.split(" ").join("T")}Z`);
+      formData.append("taskDescription", taskDescription ?? "");
+      formData.append("executors", JSON.stringify(executors));
+      if (files && files.length) {
         files.forEach((file) => {
           formData.append("files", file);
         });
       }
 
-      const executors = value.map((n) => {
-        const userData = participants.find((u) => {
-          if (u.login === n) return u;
-        });
-
-        return userData?.id;
-      }) as string[];
-
       const { message } = await addTask({
+        formData,
         projectId: projectQuery.projectId,
-        name,
-        deadline: `${deadline.split(" ").join("T")}Z`,
-        executors,
-        taskDescription,
       }).unwrap();
       await triggerTasks(projectQuery).unwrap();
       succeed(message);

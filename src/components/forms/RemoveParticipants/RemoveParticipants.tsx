@@ -9,14 +9,18 @@ import { useForm } from "@mantine/form";
 import { Button, Checkbox } from "@mantine/core";
 import { useState } from "react";
 import type { User } from "@/app/services/user/userTypes";
+import { useLazyTaskByProjectIdQuery } from "@/app/services/tasks/tasksApi";
+import type { TProjectQuery } from "@/app/services/projects/projectsTypes";
 
 type Props = {
   projectId: string;
   participants: User[];
+  projectQuery: TProjectQuery;
 };
 const RemoveParticipants: React.FC<Props> = ({
   projectId,
   participants = [],
+  projectQuery,
 }) => {
   const form = useForm({
     mode: "uncontrolled",
@@ -25,6 +29,7 @@ const RemoveParticipants: React.FC<Props> = ({
   const [changeParticipants] = useChangeParticipantsProjectMutation();
   const [triggerProject] = useLazyProjectByIdQuery();
   const { succeed, error } = useNotification();
+  const [triggerTasks] = useLazyTaskByProjectIdQuery();
 
   const [toRemove, setToRemove] = useState<string[]>([]);
 
@@ -44,6 +49,7 @@ const RemoveParticipants: React.FC<Props> = ({
         key: "disconnect",
       }).unwrap();
       await triggerProject(projectId).unwrap();
+      await triggerTasks(projectQuery).unwrap();
       succeed(message);
     } catch (err) {
       error(errorMessages(err));
@@ -77,8 +83,9 @@ const RemoveParticipants: React.FC<Props> = ({
 
       <Button
         type="submit"
-        size="md"
+        size="sm"
         variant="outline"
+        color="red"
         disabled={toRemove.length === 0}
       >
         Удалить из проекта

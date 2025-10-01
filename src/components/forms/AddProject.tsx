@@ -12,7 +12,7 @@ import { useState } from "react";
 
 type AddProjectFormData = {
   name: string;
-  participants: Array<string>;
+  participants: string[];
 };
 
 type Props = {

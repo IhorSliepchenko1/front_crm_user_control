@@ -1,13 +1,11 @@
+import type { CalendarValue, TModal } from "@/app/services/tasks/tasksTypes";
 import { Modal } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
-
-export type Value = [string | null, string | null];
-export type TModal = "calendar" | "addTask" | null;
 
 type Props = {
   modal: TModal;
   value: [string | null, string | null];
-  setValue: React.Dispatch<React.SetStateAction<Value>>;
+  setValue: React.Dispatch<React.SetStateAction<CalendarValue>>;
   opened: boolean;
   close: () => void;
 };

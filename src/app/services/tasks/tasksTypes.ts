@@ -16,3 +16,14 @@ export type TaskItem = {
   name: string;
   status: Status;
 };
+
+export type CalendarValue = [string | null, string | null];
+export type TModal = "calendar" | "addTask" | null;
+
+export type TaskByProjectIdResponse = {
+  tasks: TaskItem[];
+  total: number;
+  count_pages: number;
+  page: number;
+  limit: number;
+};

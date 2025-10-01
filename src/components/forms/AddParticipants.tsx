@@ -11,7 +11,7 @@ import { useForm } from "@mantine/form";
 import { useState } from "react";
 
 type AddParticipantsFormData = {
-  participants: Array<string>;
+  participants: string[];
 };
 
 type Props = {

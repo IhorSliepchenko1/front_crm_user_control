@@ -1,6 +1,6 @@
 .root {
     border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-    padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+    padding: 7px 5px;
     border-radius: var(--mantine-radius-md);
     transition:
         color 100ms ease,
@@ -9,6 +9,6 @@
     cursor: pointer;
 
     label {
-        font-size: 12px !important;
+        font-size: 11.5px !important;
     }
 }

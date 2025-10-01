@@ -35,3 +35,12 @@ export type ProjectByIdItem = {
 };
 
 export type Status = "IN_REVIEW" | "IN_PROGRESS" | "DONE" | "CANCELED";
+
+export type TProjectQuery = {
+  page: number;
+  limit: number;
+  projectId: string;
+  status: Status | undefined;
+  deadlineFrom: string | undefined;
+  deadlineTo: string | undefined;
+};

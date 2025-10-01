@@ -18,7 +18,7 @@ const UserHeader = ({ isAdmin }: { isAdmin: boolean }) => {
     <Table.Thead className="text-[12px] sticky top-0">
       <Table.Tr>
         {headerItem.map((item) => (
-          <Table.Th>{item}</Table.Th>
+          <Table.Th key={item}>{item}</Table.Th>
         ))}
         {isAdmin && <Table.Th>смена статуса</Table.Th>}
         {isAdmin && <Table.Th>вылогинить</Table.Th>}

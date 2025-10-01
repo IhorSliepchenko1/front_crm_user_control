@@ -13,11 +13,11 @@ import { useDisclosure } from "@mantine/hooks";
 import RemoveParticipants from "@/components/forms/RemoveParticipants/RemoveParticipants";
 import AddParticipants from "@/components/forms/AddParticipants";
 import type { Status } from "@/app/services/projects/projectsTypes";
-import type { TModal, Value } from "@/components/modals/CalendarModal";
 import CalendarModal from "@/components/modals/CalendarModal";
 import type { User } from "@/app/services/user/userTypes";
 import AddTaskModal from "@/components/modals/AddTaskModal";
 import { useFromToDate } from "@/hooks/useFromToDate";
+import type { CalendarValue, TModal } from "@/app/services/tasks/tasksTypes";
 
 const Project = () => {
   const { id } = useParams();
@@ -26,11 +26,10 @@ const Project = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(25);
   const [status, setStatus] = useState<Status | undefined>(undefined);
-  const [value, setValue] = useState<Value>([null, null]);
+  const [value, setValue] = useState<CalendarValue>([null, null]);
   const [modal, setModal] = useState<TModal>(null);
 
   const [opened, { open, close }] = useDisclosure(false);
-
   const { deadlineFrom, deadlineTo } = useFromToDate(value);
 
   const projectQuery = {
@@ -108,6 +107,7 @@ const Project = () => {
             <RemoveParticipants
               projectId={id as string}
               participants={participants}
+              projectQuery={projectQuery}
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ const Project = () => {
         setLimit={setLimit}
         setStatus={setStatus}
         open={open}
-        creatorName={creator as string}
+        creatorName={creator}
       />
       <CalendarModal
         modal={modal}
