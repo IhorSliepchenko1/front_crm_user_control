@@ -1,7 +1,7 @@
-import type { Value } from "@/components/modals/CalendarModal";
+import type { CalendarValue } from "@/app/services/tasks/tasksTypes";
 import { useMemo } from "react";
 
-export const useFromToDate = (value: Value) => {
+export const useFromToDate = (value: CalendarValue) => {
   const fromToDate = useMemo(() => {
     if (value[0] !== null) {
       const [start, end] = value;

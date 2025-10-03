@@ -35,7 +35,7 @@ const TaskRows: React.FC<Props> = ({ tasks }) => {
       <Table.Td>{task.executors.map((l) => l.login).join(", ")}</Table.Td>
       <Table.Td
         className={
-          paintExpiredDeadline(task.deadline, task.status) ? "text-red-500" : ""
+          paintExpiredDeadline(task.deadline, task.status) ? "text-red-600" : ""
         }
       >
         {new Date(task.deadline).toLocaleString()}

@@ -6,7 +6,7 @@ import PageTitle from "@/components/UI/PageTitle";
 import { Divider, Title } from "@mantine/core";
 import { useNavigate, useParams } from "react-router-dom";
 import RenameProject from "@/components/forms/RenameProject";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import TaskData from "@/components/data/TaskData";
 import { useTaskByProjectIdQuery } from "@/app/services/tasks/tasksApi";
 import { useDisclosure } from "@mantine/hooks";
@@ -19,16 +19,22 @@ import AddTaskModal from "@/components/modals/AddTaskModal";
 import { useFromToDate } from "@/hooks/useFromToDate";
 import type { CalendarValue, TModal } from "@/app/services/tasks/tasksTypes";
 
+
+const procectDataDefault = {
+  participants: [{ id: "", login: "" }],
+  name: "",
+  count_task: 0,
+  creator: { id: "", login: "" },
+};
+
 const Project = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(25);
   const [status, setStatus] = useState<Status | undefined>(undefined);
   const [value, setValue] = useState<CalendarValue>([null, null]);
   const [modal, setModal] = useState<TModal>(null);
-
   const [opened, { open, close }] = useDisclosure(false);
   const { deadlineFrom, deadlineTo } = useFromToDate(value);
 
@@ -48,43 +54,13 @@ const Project = () => {
 
   const tasks = tasksData?.data?.tasks ?? [];
   const total = tasksData?.data?.count_pages ?? 1;
-
-  useEffect(() => {
-    if (isError) {
-      navigate(-1);
-    }
-  }, [isError]);
-
-  const projectData = useMemo(() => {
-    if (data && data.data) {
-      const { project } = data.data;
-      const { participants, name, count_task, creator } = project;
-
-      return {
-        participants,
-        name,
-        countTasks: count_task,
-        creator: creator.login,
-        countParticipants: participants.length,
-      };
-    }
-
-    return {
-      participants: [],
-      name: "",
-      countTasks: 0,
-      creator: "",
-      countParticipants: 0,
-    };
-  }, [isLoading, data]);
-
-  const { participants, name, countTasks, creator, countParticipants } =
-    projectData;
+  const projectData = data?.data?.project ?? procectDataDefault;
+  const { participants, name, count_task, creator } = projectData;
 
   const projectInfo = [
-    { title: "Куратор", value: creator },
-    { title: "К-во участников", value: countParticipants },
-    { title: "К-во задач", value: countTasks },
+    { title: "Куратор", value: creator.login },
+    { title: "К-во участников", value: participants.length },
+    { title: "К-во задач", value: count_task },
   ];
 
   const removeCurentUsers = users?.data?.filter((u) => {
@@ -92,6 +68,14 @@ const Project = () => {
   });
 
   const isLoadData = isLoading && isLoadingUsers && isLoadingTasks;
+
+  useEffect(() => {
+    if (isError) {
+      navigate(-1);
+    }
+  }, [isError]);
+
+
 
   return isLoadData ? (
     <Loader />
@@ -126,16 +110,16 @@ const Project = () => {
 
       <Divider my="md" />
       <TaskData
-        setModal={setModal}
+        open={open}
+        creatorName={creator.login}
         tasks={tasks}
         total={total}
         page={page}
         limit={limit}
+        setModal={setModal}
         setPage={setPage}
         setLimit={setLimit}
         setStatus={setStatus}
-        open={open}
-        creatorName={creator}
       />
       <CalendarModal
         modal={modal}

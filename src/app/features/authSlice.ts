@@ -33,4 +33,14 @@ const slice = createSlice({
 export const isAdminRole = (state: RootState) => {
   return state.auth.userData?.roles.includes("ADMIN");
 };
+
+export const myInfo = (state: RootState) => {
+  return (
+    state.auth.userData || {
+      roles: [],
+      avatarPath: "",
+      name: "",
+    }
+  );
+};
 export default slice.reducer;

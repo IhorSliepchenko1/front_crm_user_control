@@ -12,10 +12,11 @@ td > a {
 }
 
 *::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
     height: 10px;
 }
+
 * ::-webkit-scrollbar-thumb {
-    border-radius: 5px;
+    /* border-radius: 5px; */
     background-color: black;
 }

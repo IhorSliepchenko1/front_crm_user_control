@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import { useAppSelector } from "@/app/hooks";
 import type { Status } from "@/app/services/projects/projectsTypes";
 import { useTranslateStatus } from "@/hooks/useTranslateStatus";
+import { myInfo } from "@/app/features/authSlice";
 
 type Props = {
   tasks: TaskItem[];
@@ -26,12 +27,12 @@ const TaskData: React.FC<Props> = ({
   tasks,
   limit,
   total,
+  creatorName,
+  open,
+  setStatus,
   setPage,
   setLimit,
-  setStatus,
-  open,
   setModal,
-  creatorName,
 }) => {
   const { translateToChange } = useTranslateStatus();
 
@@ -39,7 +40,7 @@ const TaskData: React.FC<Props> = ({
     setModal(modal);
     open();
   };
-  const { userData } = useAppSelector((state) => state.auth);
+  const { name } = useAppSelector(myInfo);
 
   return (
     <div className="">
@@ -68,7 +69,7 @@ const TaskData: React.FC<Props> = ({
             выбрать дату
           </Button>
         </div>
-        {userData?.name === creatorName && (
+        {name === creatorName && (
           <Button
             leftSection={<Plus size={20} />}
             color="teal"

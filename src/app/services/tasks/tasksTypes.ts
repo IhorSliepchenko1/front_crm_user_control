@@ -1,4 +1,5 @@
 import type { Status } from "../projects/projectsTypes";
+import type { User } from "../user/userTypes";
 
 export type TaskByProjectId = {
   page: number;
@@ -27,4 +28,26 @@ export type TaskByProjectIdResponse = {
   count_pages: number;
   page: number;
   limit: number;
+};
+
+export type TFile = {
+  id: string;
+  fileName: string;
+  type: "filePathTask" | "filePathExecutor";
+};
+
+export type TaskById = {
+  name: string;
+  executors: User[];
+  deadline: string;
+  status: Status;
+  executorDescription: string | null;
+  taskDescription: string | null;
+  files: TFile[];
+  project: {
+    creatorId: string;
+    creator: {
+      login: string;
+    };
+  };
 };

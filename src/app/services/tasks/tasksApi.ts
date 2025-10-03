@@ -1,7 +1,7 @@
 import { METHODS } from "@/utils/methods";
 import { api } from "../api";
 import type { ApiResponse } from "@/types";
-import type { TaskByProjectId, TaskByProjectIdResponse } from "./tasksTypes";
+import type { TaskById, TaskByProjectId, TaskByProjectIdResponse } from "./tasksTypes";
 import type { TProjectQuery } from "../projects/projectsTypes";
 
 export const authApi = api.injectEndpoints({
@@ -34,7 +34,7 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    taskById: builder.query({
+    taskById: builder.query<ApiResponse<TaskById>, string>({
       query: (id) => ({
         url: `/task/${id}`,
         method: METHODS.GET,

@@ -10,6 +10,7 @@ import { House, LogOut, Users, FolderKanban } from "lucide-react";
 import NavbarLink from "@/components/UI/NavbarLink/NavbarLink";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
+import { myInfo } from "@/app/features/authSlice";
 
 const NavBar = () => {
   const url = import.meta.env.VITE_API_URL;
@@ -22,7 +23,7 @@ const NavBar = () => {
     { icon: FolderKanban, label: "Проекты", navigate: "/projects" },
   ];
 
-  const { userData } = useAppSelector((state) => state.auth);
+  const { name, avatarPath } = useAppSelector(myInfo);
   const [logout] = useLogoutMeMutation();
   const [triggerMe] = useLazyGetMeQuery();
   const { succeed, error } = useNotification();
@@ -40,10 +41,10 @@ const NavBar = () => {
   return (
     <nav className={classes.navbar}>
       <Center>
-        {userData?.avatarPath ? (
-          <Avatar src={`${url}/${userData?.avatarPath}`} alt="it's me" />
+        {avatarPath ? (
+          <Avatar src={`${url}/${avatarPath}`} alt="it's me" />
         ) : (
-          <Avatar name={userData?.name} color="initials" />
+          <Avatar name={name} color="initials" />
         )}
       </Center>
 

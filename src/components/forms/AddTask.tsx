@@ -5,23 +5,24 @@ import {
   useAddTaskMutation,
   useLazyTaskByProjectIdQuery,
 } from "@/app/services/tasks/tasksApi";
-import {
-  Button,
-  FileInput,
-  MultiSelect,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
+import { Button, FileInput, MultiSelect, TextInput } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { useState } from "react";
 import type { User } from "@/app/services/user/userTypes";
 import type { TProjectQuery } from "@/app/services/projects/projectsTypes";
 import { useExstractId } from "@/hooks/useExstractId";
+import { useEditor } from "@tiptap/react";
+import Highlight from '@tiptap/extension-highlight';
+import StarterKit from '@tiptap/starter-kit';
+import TextAlign from '@tiptap/extension-text-align';
+import Superscript from '@tiptap/extension-superscript';
+import SubScript from '@tiptap/extension-subscript';
+import Link from "@tiptap/extension-link";
+import Editor from "../UI/Editor";
 
 type CreateTaskFormData = {
   name: string;
   deadline: string;
-  taskDescription?: string;
   executors: string[];
   files?: Array<File>;
 };
@@ -40,12 +41,26 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
   };
   const [value, setValue] = useState<string[]>([]);
 
+  const editor = useEditor({
+    shouldRerenderOnTransaction: true,
+    extensions: [
+      StarterKit.configure({ link: false }),
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
+    content: "<span>Описание задачи</span>",
+  });
+
+  const html = editor?.getHTML();
+
   const form = useForm<CreateTaskFormData>({
     mode: "uncontrolled",
     initialValues: {
       name: "",
       deadline: "",
-      taskDescription: "",
       executors: [],
       files: [],
     },
@@ -58,11 +73,6 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
       deadline: (value) =>
         value && validateDeadline(value)
           ? "Дата сдачи результатов может быть только больше текущей!"
-          : null,
-
-      taskDescription: (value) =>
-        value && value.length > 2_500
-          ? "Длина описания задачи не может превышать 2500 символов!"
           : null,
 
       executors: () =>
@@ -78,7 +88,6 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
           : null,
     },
   });
-  console.log(value);
 
   const { succeed, error } = useNotification();
   const [addTask] = useAddTaskMutation();
@@ -88,18 +97,16 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
 
   const onSubmit = async (data: CreateTaskFormData) => {
     try {
-      const { name, deadline, taskDescription, files } = data;
+      const { name, deadline, files } = data;
       const executors = exstract({
         str: value,
         obj: participants,
       });
-      console.log(executors);
-
       const formData = new FormData();
 
       formData.append("name", name);
       formData.append("deadline", `${deadline.split(" ").join("T")}Z`);
-      formData.append("taskDescription", taskDescription ?? "");
+      formData.append("taskDescription", html);
       formData.append("executors", JSON.stringify(executors));
       if (files && files.length) {
         files.forEach((file) => {
@@ -130,16 +137,8 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
           placeholder="именуйте задачу"
           required
         />
-        <Textarea
-          {...form.getInputProps("taskDescription")}
-          key={form.key("taskDescription")}
-          label="Описание задачи"
-          placeholder="описание к выполнению"
-          autosize
-          minRows={10}
-          maxRows={50}
-          required
-        />
+
+        <Editor editor={editor} />
         <DateTimePicker
           {...form.getInputProps("deadline")}
           key={form.key("deadline")}

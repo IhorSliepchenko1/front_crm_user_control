@@ -1,3 +1,4 @@
+import { myInfo } from "@/app/features/authSlice";
 import { useAppSelector } from "@/app/hooks";
 import { useLogoutByIdMutation } from "@/app/services/auth/authApi";
 import {
@@ -24,7 +25,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
   const [isActive] = useIsActiveUserMutation();
   const [triggerUsers] = useLazyGetUsersQuery();
   const [logoutUserById] = useLogoutByIdMutation();
-  const myName = useAppSelector((state) => state.auth.userData?.name);
+  const { name } = useAppSelector(myInfo);
 
   const { changePage } = useChangePage();
 
@@ -56,9 +57,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
       >
         <Anchor underline="hover">
           {user.name}
-          <span className="text-[red]">
-            {myName === user.name ? " (Я)" : ""}
-          </span>
+          <span className="text-[red]">{name === user.name ? " (Я)" : ""}</span>
         </Anchor>
       </Table.Td>
       <Table.Td>
@@ -93,7 +92,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
               color={user.is_active ? "red" : "green"}
               size="xs"
               onClick={() => changeStatus(user.id)}
-              disabled={myName === user.name}
+              disabled={name === user.name}
             >
               {user.is_active ? "blocked" : "active"}
             </Button>
@@ -107,7 +106,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
               color={"dark"}
               size="xs"
               onClick={() => logoutUserByIdSession(user.id)}
-              disabled={myName === user.name}
+              disabled={name === user.name}
             >
               {"выход"}
             </Button>
