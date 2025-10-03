@@ -1,24 +1,16 @@
 import { useTaskByIdQuery } from "@/app/services/tasks/tasksApi";
 import Loader from "@/components/UI/Loader";
 import PageTitle from "@/components/UI/PageTitle";
-import { Badge, Divider, Title, Tooltip, Typography } from "@mantine/core";
+import { Divider, Title, Typography } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import type { TaskById, TFile } from "@/app/services/tasks/tasksTypes";
-import { useTranslateStatus } from "@/hooks/useTranslateStatus";
-import mime from "mime";
-import {
-  FaFileCsv,
-  FaFileExcel,
-  FaFilePdf,
-  FaFileImage,
-  FaFile,
-} from "react-icons/fa6";
-import { IoDocumentText } from "react-icons/io5";
-import { FaFileWord } from "react-icons/fa";
-import { IoIosDocument } from "react-icons/io";
-import { BiSolidFilePng } from "react-icons/bi";
-import type { IconType } from "react-icons/lib";
-import Icon from "@/components/UI/Icon";
+import TaskFileData from "@/components/data/TaskFileData";
+import TaskMainInfo from "@/components/items/TaskMainInfo";
+
+type TPathTask = {
+  filePathTask: TFile[];
+  filePathExecutor: TFile[];
+};
 
 const defaultTask: TaskById = {
   name: "",
@@ -45,37 +37,13 @@ const defaultTask: TaskById = {
   },
 };
 
-const mimeTypes: { type: string; icon: IconType }[] = [
-  { type: "text/csv", icon: FaFileCsv },
-  { type: "application/vnd.ms-excel", icon: FaFileExcel },
-  {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    icon: FaFileExcel,
-  },
-  { type: "application/pdf", icon: FaFilePdf },
-  { type: "text/plain", icon: IoDocumentText },
-  { type: "application/msword", icon: FaFileWord },
-  {
-    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    icon: IoIosDocument,
-  },
-  { type: "image/png", icon: BiSolidFilePng },
-  { type: "image/jpeg", icon: FaFileImage },
-];
-
 const Task = () => {
   const { id } = useParams();
   const { data, isLoading } = useTaskByIdQuery(id as string);
   const task: TaskById = data?.data ?? defaultTask;
-  const { deadline, status, name, executors, taskDescription, files } = task;
-  const now = new Date().toLocaleString();
-  const deadlineDate = new Date(deadline).toLocaleString();
-  const { translateToRender } = useTranslateStatus();
+  const { name, taskDescription, files } = task;
 
-  const { filePathTask } = files.reduce<{
-    filePathTask: TFile[];
-    filePathExecutor: TFile[];
-  }>(
+  const { filePathTask } = files.reduce<TPathTask>(
     (acc, val) => {
       if (val.type === "filePathExecutor") {
         acc.filePathExecutor.push(val);
@@ -91,33 +59,6 @@ const Task = () => {
     }
   );
 
-  const getFileType = (fileName: string) => {
-    const type = mime.getType(fileName);
-    const icon = mimeTypes.find((i) => type === i.type);
-    const array = fileName.split(".");
-    const name = array[array.length - 1];
-    return { icon: icon?.icon ?? FaFile, name };
-  };
-  const url = import.meta.env.VITE_API_URL;
-
-  const handleDownload = async (fileName: string) => {
-    try {
-      const response = await fetch(`${url}/${fileName}`);
-      console.log(response);
-
-      const blob = await response.blob();
-      console.log(blob);
-
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   return (
     <>
       {isLoading ? (
@@ -125,45 +66,9 @@ const Task = () => {
       ) : (
         <div>
           <PageTitle title="Информация о задаче " cursive={name} />
-
-          <div className="mt-5 flex justify-between">
-            <div className="flex flex-col gap-3 w-[500px]">
-              <div className="flex justify-between items-center">
-                <span>Статус:</span>
-                <Badge color={translateToRender(status).color}>
-                  {translateToRender(status).text}
-                </Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Срок сдачи:</span>
-                <strong className={deadlineDate < now ? "text-red-600" : ""}>
-                  {deadlineDate}
-                </strong>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Участники:</span>
-                <strong className="text-[13px]">
-                  {executors.map((e) => e.login).join(", ")}
-                </strong>
-              </div>
-              <div className="mt-7">
-                <p>Файлы для работы:</p>
-                <div className="flex gap-10 mt-2">
-                  {filePathTask.map((item, index) => (
-                    <Tooltip label="скачать" position="bottom" key={index}>
-                      <button
-                        className="text-center cursor-pointer"
-                        onClick={() => handleDownload(item.fileName)}
-                      >
-                        <Icon icon={getFileType(item.fileName).icon} />
-                        <span>.{getFileType(item.fileName).name}</span>
-                      </button>
-                    </Tooltip>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <TaskMainInfo data={data?.data} defaultTask={defaultTask} />
+          <Divider my="md" />
+          <TaskFileData title={"Файлы для работы:"} filePath={filePathTask} />
           <Divider my="md" />
           <div>
             <Title order={3}>Описание к задаче</Title>

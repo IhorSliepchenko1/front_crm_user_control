@@ -63,7 +63,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
       <Table.Td>
         <Center>
           {user.avatarPath ? (
-            <Avatar src={`${url}/${user.avatarPath}`} alt="it's user" />
+            <Avatar src={`${url}/avatars/${user.avatarPath}`} alt="it's user" />
           ) : (
             <Avatar name={user.name} color="initials" />
           )}

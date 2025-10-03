@@ -42,7 +42,7 @@ const NavBar = () => {
     <nav className={classes.navbar}>
       <Center>
         {avatarPath ? (
-          <Avatar src={`${url}/${avatarPath}`} alt="it's me" />
+          <Avatar src={`${url}/avatars/${avatarPath}`} alt="it's me" />
         ) : (
           <Avatar name={name} color="initials" />
         )}

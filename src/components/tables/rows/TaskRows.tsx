@@ -16,7 +16,7 @@ const TaskRows: React.FC<Props> = ({ tasks }) => {
     const now = new Date();
     const deadline = new Date(dateTime);
 
-    return deadline < now && status !== "CANCELED" && status !== "DONE";
+    return deadline < now && status === "IN_PROGRESS";
   };
 
   const rows = tasks.map((task, index) => (

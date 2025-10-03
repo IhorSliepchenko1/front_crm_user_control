@@ -1,7 +1,11 @@
 import { METHODS } from "@/utils/methods";
 import { api } from "../api";
 import type { ApiResponse } from "@/types";
-import type { TaskById, TaskByProjectId, TaskByProjectIdResponse } from "./tasksTypes";
+import type {
+  TaskById,
+  TaskByProjectId,
+  TaskByProjectIdResponse,
+} from "./tasksTypes";
 import type { TProjectQuery } from "../projects/projectsTypes";
 
 export const authApi = api.injectEndpoints({

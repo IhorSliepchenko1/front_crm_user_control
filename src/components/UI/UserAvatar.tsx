@@ -12,7 +12,7 @@ const UserAvatar: React.FC<Props> = ({ avatar, name }) => {
       {avatar ? (
         <Avatar
           radius="xl"
-          src={`${url}/${avatar}`}
+          src={`${url}/avatars/${avatar}`}
           style={{ width: 200, height: 400 }}
         />
       ) : (
