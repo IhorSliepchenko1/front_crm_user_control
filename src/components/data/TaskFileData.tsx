@@ -50,7 +50,6 @@ const TaskFileData: React.FC<Props> = ({ title, filePath }) => {
   };
   return (
     <div>
-      <p>{title}</p>
       <div className="flex gap-10 mt-2">
         {filePath.map((item, index) => (
           <Tooltip label="скачать" position="bottom" key={index}>

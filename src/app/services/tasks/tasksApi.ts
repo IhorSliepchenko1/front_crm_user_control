@@ -27,6 +27,23 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
+    updateExecutorByTaskId: builder.mutation<
+      ApiResponse,
+      {
+        formData: FormData;
+        taskId: string;
+      }
+    >({
+      query: ({ formData, taskId }) => {
+        return {
+          url: `/task/update-executor/${taskId}`,
+          method: METHODS.PUT,
+          body: formData,
+          params: { taskId },
+        };
+      },
+    }),
+
     taskByProjectId: builder.query<
       ApiResponse<TaskByProjectIdResponse>,
       TaskByProjectId
@@ -53,4 +70,5 @@ export const {
   useAddTaskMutation,
   useLazyTaskByIdQuery,
   useTaskByIdQuery,
+  useUpdateExecutorByTaskIdMutation,
 } = authApi;
