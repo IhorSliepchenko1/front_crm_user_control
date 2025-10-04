@@ -6,7 +6,10 @@ import { Button, NativeSelect, Table } from "@mantine/core";
 import Pagination from "../UI/Pagination";
 import { Plus } from "lucide-react";
 import { useAppSelector } from "@/app/hooks";
-import type { Status } from "@/app/services/projects/projectsTypes";
+import type {
+  Status,
+  TProjectQuery,
+} from "@/app/services/projects/projectsTypes";
 import { useTranslateStatus } from "@/hooks/useTranslateStatus";
 import { myInfo } from "@/app/features/authSlice";
 
@@ -21,6 +24,7 @@ type Props = {
   setModal: React.Dispatch<React.SetStateAction<"calendar" | "addTask" | null>>;
   open: () => void;
   creatorName: string;
+  projectQuery: TProjectQuery;
 };
 
 const TaskData: React.FC<Props> = ({
@@ -33,6 +37,7 @@ const TaskData: React.FC<Props> = ({
   setPage,
   setLimit,
   setModal,
+  projectQuery,
 }) => {
   const { translateToChange } = useTranslateStatus();
 
@@ -90,7 +95,7 @@ const TaskData: React.FC<Props> = ({
             className="min-w-[1300px]"
           >
             <TaskHeader />
-            <TaskRows tasks={tasks} />
+            <TaskRows tasks={tasks} projectQuery={projectQuery} />
           </Table>
         </TableScrolContainer>
       ) : (

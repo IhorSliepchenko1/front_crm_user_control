@@ -19,7 +19,6 @@ import AddTaskModal from "@/components/modals/AddTaskModal";
 import { useFromToDate } from "@/hooks/useFromToDate";
 import type { CalendarValue, TModal } from "@/app/services/tasks/tasksTypes";
 
-
 const procectDataDefault = {
   participants: [{ id: "", login: "" }],
   name: "",
@@ -75,8 +74,6 @@ const Project = () => {
     }
   }, [isError]);
 
-
-
   return isLoadData ? (
     <Loader />
   ) : (
@@ -120,6 +117,7 @@ const Project = () => {
         setPage={setPage}
         setLimit={setLimit}
         setStatus={setStatus}
+        projectQuery={projectQuery}
       />
       <CalendarModal
         modal={modal}

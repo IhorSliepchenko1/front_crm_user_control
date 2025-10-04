@@ -78,8 +78,9 @@ const Task = () => {
               <Title order={3}>Описание к задаче</Title>
               <div>
                 <TaskFileData
-                  title={"Файлы для работы:"}
                   filePath={filePathTask}
+                  taskId={id as string}
+                  creatorName={task.project.creator.login}
                 />
                 <TaskDescScrolContainer>
                   <Typography className="h-[100%]">
@@ -99,8 +100,9 @@ const Task = () => {
               <Title order={3}>Описание к выполнению</Title>
               <div>
                 <TaskFileData
-                  title={"Файлы выполнения задачи:"}
                   filePath={filePathExecutor}
+                  taskId={id as string}
+                  creatorName={task.project.creator.login}
                 />
                 <TaskDescScrolContainer>
                   <Typography className="h-[100%]">
