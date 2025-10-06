@@ -9,6 +9,10 @@ import TaskMainInfo from "@/components/items/TaskMainInfo";
 import { useDisclosure } from "@mantine/hooks";
 import UpdateExecutorTaskModal from "@/components/modals/UpdateExecutorTaskModal";
 import TaskDescScrolContainer from "@/components/UI/TaskDescScrolContainer";
+import { useAppSelector } from "@/app/hooks";
+import { myInfo } from "@/app/features/authSlice";
+import UpdateCreatorTaskModal from "@/components/modals/UpdateCreatorTaskModal";
+import { useState } from "react";
 
 type TPathTask = {
   filePathTask: TFile[];
@@ -34,6 +38,12 @@ const defaultTask: TaskById = {
       type: "filePathExecutor",
     },
   ],
+  participants: [
+    {
+      id: "",
+      login: "",
+    },
+  ],
   project: {
     creatorId: "",
     creator: { login: "" },
@@ -45,8 +55,22 @@ const Task = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { data, isLoading } = useTaskByIdQuery(id as string);
+  const [modal, setModal] = useState<"executor" | "creator">();
+
   const task: TaskById = data?.data ?? defaultTask;
-  const { name, taskDescription, files, executorDescription } = task;
+  const {
+    name,
+    taskDescription,
+    files,
+    executorDescription,
+    deadline,
+    participants,
+  } = task;
+  const currentName = useAppSelector(myInfo).name;
+  const changeModal = (type: "executor" | "creator") => {
+    setModal(type);
+    open();
+  };
 
   const { filePathTask, filePathExecutor } = files.reduce<TPathTask>(
     (acc, val) => {
@@ -91,6 +115,16 @@ const Task = () => {
                     />
                   </Typography>
                 </TaskDescScrolContainer>
+                {currentName === task.project.creator.login && (
+                  <Button
+                    color="red"
+                    fullWidth
+                    className="mt-5"
+                    onClick={() => changeModal("creator")}
+                  >
+                    Редактировать
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -116,16 +150,29 @@ const Task = () => {
               </div>
             </div>
           </div>
-          <UpdateExecutorTaskModal
-            opened={opened}
-            close={close}
-            taskId={id as string}
-            executorDescription={executorDescription ?? ""}
-          />
+          {modal === "executor" ? (
+            <UpdateExecutorTaskModal
+              opened={opened}
+              close={close}
+              taskId={id as string}
+              executorDescription={executorDescription ?? ""}
+            />
+          ) : (
+            <UpdateCreatorTaskModal
+              opened={opened}
+              close={close}
+              taskId={id as string}
+              name={name}
+              deadline={deadline}
+              taskDescription={taskDescription ?? ""}
+              participants={participants}
+            />
+          )}
+
           <Button
             fullWidth
-            className="mt-10"
-            onClick={open}
+            className="mt-5"
+            onClick={() => changeModal("executor")}
             disabled={task.status !== "IN_PROGRESS"}
           >
             Отпправить решение

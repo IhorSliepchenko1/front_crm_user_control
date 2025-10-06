@@ -93,6 +93,22 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
+    removeExecutor: builder.mutation<
+      ApiResponse,
+      {
+        executorId: string;
+        taskId: string;
+      }
+    >({
+      query: ({ executorId, taskId }) => {
+        return {
+          url: `task/remove-executor`,
+          method: METHODS.PATCH,
+          params: { executorId, taskId },
+        };
+      },
+    }),
+
     taskByProjectId: builder.query<
       ApiResponse<TaskByProjectIdResponse>,
       TaskByProjectId
@@ -123,4 +139,5 @@ export const {
   useUpdateCreatorByTaskIdMutation,
   useDeleteFileTaskMutation,
   useChangeStatusMutation,
+  useRemoveExecutorMutation,
 } = authApi;

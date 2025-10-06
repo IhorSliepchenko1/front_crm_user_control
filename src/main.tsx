@@ -43,7 +43,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
-    <MantineProvider>
+    <MantineProvider defaultColorScheme="dark">
       <Notifications />
       <RouterProvider router={router} />
     </MantineProvider>

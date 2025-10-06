@@ -55,7 +55,6 @@ const Register: React.FC<Pagination> = ({ page, limit, active }) => {
         {...form.getInputProps("password")}
         required
       />
-
       <TextInput
         {...form.getInputProps("adminCode")}
         label="Админ код"

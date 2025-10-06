@@ -14,7 +14,7 @@ export type TaskItem = {
   id: string;
   createdAt: string;
   deadline: string;
-  executors: { login: string }[];
+  executors: { login: string; id: string }[];
   name: string;
   status: Status;
 };
@@ -39,6 +39,10 @@ export type TFile = {
 export type TaskById = {
   name: string;
   executors: User[];
+  participants: {
+    id: string;
+    login: string;
+  }[];
   deadline: string;
   status: Status;
   executorDescription: string | null;

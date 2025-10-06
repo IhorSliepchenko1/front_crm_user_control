@@ -71,7 +71,7 @@ const TaskFileData: React.FC<Props> = ({ filePath, taskId, creatorName }) => {
     <div>
       <div className="flex gap-10 mt-2">
         {filePath.map((item, index) => (
-          <Menu trigger="hover">
+          <Menu trigger="hover" key={index}>
             <Menu.Target>
               <div className="grid justify-center">
                 <Icon icon={getFileType(item.fileName).icon} />
