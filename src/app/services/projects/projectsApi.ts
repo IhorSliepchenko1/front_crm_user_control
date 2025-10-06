@@ -56,6 +56,14 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
+    projectsWithMe: builder.query<ApiResponse<GetProjectsData>, Pagination>({
+      query: ({ page, limit, active }) => ({
+        url: `/projects/projects-with-me`,
+        method: METHODS.GET,
+        params: { page, limit, active },
+      }),
+    }),
+
     renameProject: builder.mutation<ApiResponse, { name: string; id: string }>({
       query: ({ name, id }) => ({
         url: `/projects/rename/${id}`,
@@ -75,4 +83,6 @@ export const {
   useProjectByIdQuery,
   useChangeParticipantsProjectMutation,
   useRenameProjectMutation,
+  useLazyProjectsWithMeQuery,
+  useProjectsWithMeQuery,
 } = authApi;

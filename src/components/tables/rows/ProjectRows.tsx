@@ -14,7 +14,7 @@ type Props = {
   page: number;
   limit: number;
   active: boolean;
-  isAdmin: boolean;
+  isAdmin?: boolean;
   isMy?: boolean;
 };
 
@@ -22,9 +22,9 @@ const ProjectRows: React.FC<Props> = ({
   projects,
   page,
   limit,
-  isAdmin,
+  isAdmin = false,
   active,
-  isMy,
+  isMy = false,
 }) => {
   const { succeed, error } = useNotification();
 
@@ -53,7 +53,7 @@ const ProjectRows: React.FC<Props> = ({
       <Table.Td className="text-[8px]">
         <Anchor
           underline="hover"
-          onClick={() => changePage(project.id, "project")}
+          onClick={() => changePage(project.id, "projects/project")}
         >
           {project.name}
         </Anchor>
