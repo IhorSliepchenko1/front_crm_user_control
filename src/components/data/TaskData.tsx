@@ -95,7 +95,11 @@ const TaskData: React.FC<Props> = ({
             className="min-w-[1300px]"
           >
             <TaskHeader />
-            <TaskRows tasks={tasks} projectQuery={projectQuery} />
+            <TaskRows
+              tasks={tasks}
+              projectQuery={projectQuery}
+              isShow={name === creatorName}
+            />
           </Table>
         </TableScrolContainer>
       ) : (

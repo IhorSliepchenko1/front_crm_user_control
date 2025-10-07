@@ -1,3 +1,4 @@
+import { isAdminRole } from "@/app/features/authSlice";
 import {
   useIsActiveProjectMutation,
   useLazyProjectAllQuery,
@@ -8,15 +9,15 @@ import { useChangePage } from "@/hooks/useChangePage";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Anchor, Button, Table } from "@mantine/core";
+import { useSelector } from "react-redux";
 
 type Props = {
   projects: ProjectItem[];
   page: number;
   limit: number;
   active?: boolean;
-  isAdmin?: boolean;
   isMy?: boolean;
-  isShow?: boolean;
+  isShowBtn?: boolean;
   isRoute?: boolean;
 };
 
@@ -24,17 +25,16 @@ const ProjectRows: React.FC<Props> = ({
   projects,
   page,
   limit,
-  isAdmin = false,
   active = true,
   isMy = false,
-  isShow = false,
-  isRoute = true,
+  isShowBtn = false,
+  isRoute = false,
 }) => {
   const { succeed, error } = useNotification();
   const [isActive] = useIsActiveProjectMutation();
   const [triggerProjects] = useLazyProjectAllQuery();
   const { changePage } = useChangePage();
-
+  const isAdmin = useSelector(isAdminRole);
   const changeStatus = async (id: string) => {
     try {
       const { message } = await isActive(id).unwrap();
@@ -53,15 +53,18 @@ const ProjectRows: React.FC<Props> = ({
   const rows = projects.map((project) => (
     <Table.Tr key={project.id} className="text-[12px]">
       <Table.Td className="text-[8px]">
-        {isRoute ? (
-          <Anchor
-            underline="hover"
-            onClick={() => changePage(project.id, "/projects/project")}
-          >
+        {/* {(isAdmin || isRoute) && (
+          <Anchor onClick={() => changePage(project.id, "/projects/project")}>
+            {project.name}
+          </Anchor>
+        )} */}
+
+        {isAdmin || isRoute ? (
+          <Anchor onClick={() => changePage(project.id, "/projects/project")}>
             {project.name}
           </Anchor>
         ) : (
-          project.name
+          <p className="text-[14px]">{project.name}</p>
         )}
       </Table.Td>
       <Table.Td>{project.created_at}</Table.Td>
@@ -79,7 +82,7 @@ const ProjectRows: React.FC<Props> = ({
       <Table.Td>{project.in_reviews_tasks}</Table.Td>
       <Table.Td>{project.done_tasks}</Table.Td>
       <Table.Td>{project.canceled_task}</Table.Td>
-      {isShow && (
+      {isShowBtn && (
         <Table.Td>
           {
             <Button

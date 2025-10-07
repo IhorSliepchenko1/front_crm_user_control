@@ -8,11 +8,10 @@ import { useProjectsWithMeQuery } from "@/app/services/projects/projectsApi";
 import Loader from "../UI/Loader";
 import { useParams } from "react-router-dom";
 
-const ProjectsWithMe = () => {
+const ProjectsWithMe = ({ isRoute = false }: { isRoute?: boolean }) => {
   const { id } = useParams();
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(25);
-
   const { data, isLoading } = useProjectsWithMeQuery({
     page,
     limit,
@@ -53,7 +52,7 @@ const ProjectsWithMe = () => {
                 projects={projects}
                 page={page}
                 limit={limit}
-                isRoute={false}
+                isRoute={isRoute}
               />
             </Table>
           </TableScrolContainer>

@@ -31,7 +31,7 @@ const User = () => {
             isAdmin={isAdmin as boolean}
           />
           <Divider my="md" />
-          <ProjectsWithMe />
+          <ProjectsWithMe isRoute={isAdmin} />
         </div>
       )}
     </>

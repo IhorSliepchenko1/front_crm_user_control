@@ -103,15 +103,15 @@ const Projects = () => {
                   withColumnBorders
                   className="min-w-[1300px]"
                 >
-                  <ProjectHeader isShow={true} />
+                  <ProjectHeader isShowBtnTitle={true} />
                   <ProjectRows
                     projects={projects}
                     page={page}
                     limit={limit}
                     active={active}
                     isMy={isMy}
-                    isAdmin={Boolean(isAdmin)}
-                    isShow={true}
+                    isShowBtn={true}
+                    isRoute={true}
                   />
                 </Table>
               </TableScrolContainer>

@@ -25,7 +25,7 @@ const Home = () => {
             isAdmin={true}
           />
           <Divider my="md" />
-          <ProjectsWithMe />
+          <ProjectsWithMe isRoute={true} />
         </>
       )}
     </>

@@ -1,10 +1,10 @@
 import { Table } from "@mantine/core";
 
 type Props = {
-  isShow?: boolean;
+  isShowBtnTitle?: boolean;
 };
 
-const ProjectHeader: React.FC<Props> = ({ isShow = false }) => {
+const ProjectHeader: React.FC<Props> = ({ isShowBtnTitle = false }) => {
   const headerItem = [
     "название",
     "создан",
@@ -18,7 +18,7 @@ const ProjectHeader: React.FC<Props> = ({ isShow = false }) => {
     "смена статуса",
   ];
 
-  if (!isShow) {
+  if (!isShowBtnTitle) {
     headerItem.pop();
   }
   return (

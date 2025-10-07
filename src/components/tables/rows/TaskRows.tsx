@@ -18,9 +18,10 @@ import { Trash } from "lucide-react";
 type Props = {
   tasks: TaskItem[];
   projectQuery: TProjectQuery;
+  isShow: boolean;
 };
 
-const TaskRows: React.FC<Props> = ({ tasks, projectQuery }) => {
+const TaskRows: React.FC<Props> = ({ tasks, projectQuery, isShow }) => {
   const { changePage } = useChangePage();
   const { translateToRender, translateToChange } = useTranslateStatus();
 
@@ -74,16 +75,18 @@ const TaskRows: React.FC<Props> = ({ tasks, projectQuery }) => {
               {translateToRender(task.status).text}
             </Badge>
           </Menu.Target>
-          <Menu.Dropdown>
-            {statuses.map(
-              (status) =>
-                status !== translateToRender(task.status).text && (
-                  <Menu.Item onClick={() => onSubmit(status, task.id)}>
-                    {status}
-                  </Menu.Item>
-                )
-            )}
-          </Menu.Dropdown>
+          {isShow && (
+            <Menu.Dropdown>
+              {statuses.map(
+                (status) =>
+                  status !== translateToRender(task.status).text && (
+                    <Menu.Item onClick={() => onSubmit(status, task.id)}>
+                      {status}
+                    </Menu.Item>
+                  )
+              )}
+            </Menu.Dropdown>
+          )}
         </Menu>
       </Table.Td>
       <Table.Td>
@@ -95,24 +98,26 @@ const TaskRows: React.FC<Props> = ({ tasks, projectQuery }) => {
               </span>
             </Text>
           </Menu.Target>
-          <Menu.Dropdown>
-            {task.executors.map((executor, index) => (
-              <Menu.Item key={index}>
-                <Button
-                  variant="light"
-                  color="red"
-                  size="xs"
-                  radius="md"
-                  w={"100%"}
-                  onClick={() => onSubmitRemove(executor.id, task.id)}
-                >
-                  <span className="cursor-pointer flex items-center gap-1">
-                    {executor.login} <Trash size={15} color="red" />
-                  </span>
-                </Button>
-              </Menu.Item>
-            ))}
-          </Menu.Dropdown>
+          {isShow && (
+            <Menu.Dropdown>
+              {task.executors.map((executor, index) => (
+                <Menu.Item key={index}>
+                  <Button
+                    variant="light"
+                    color="red"
+                    size="xs"
+                    radius="md"
+                    w={"100%"}
+                    onClick={() => onSubmitRemove(executor.id, task.id)}
+                  >
+                    <span className="cursor-pointer flex items-center gap-1">
+                      {executor.login} <Trash size={15} color="red" />
+                    </span>
+                  </Button>
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
+          )}
         </Menu>
       </Table.Td>
       <Table.Td
