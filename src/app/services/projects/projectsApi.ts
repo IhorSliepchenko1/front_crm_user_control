@@ -57,10 +57,10 @@ export const authApi = api.injectEndpoints({
     }),
 
     projectsWithMe: builder.query<ApiResponse<GetProjectsData>, Pagination>({
-      query: ({ page, limit, active }) => ({
+      query: ({ page, limit, userId }) => ({
         url: `/projects/projects-with-me`,
         method: METHODS.GET,
-        params: { page, limit, active },
+        params: { page, limit, userId },
       }),
     }),
 

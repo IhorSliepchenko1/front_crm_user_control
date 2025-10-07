@@ -1,6 +1,10 @@
 import { Table } from "@mantine/core";
 
-const ProjectHeader = () => {
+type Props = {
+  isShow?: boolean;
+};
+
+const ProjectHeader: React.FC<Props> = ({ isShow = false }) => {
   const headerItem = [
     "название",
     "создан",
@@ -13,6 +17,10 @@ const ProjectHeader = () => {
     "отменённые задачи",
     "смена статуса",
   ];
+
+  if (!isShow) {
+    headerItem.pop();
+  }
   return (
     <Table.Thead className="text-[12px]">
       <Table.Tr>

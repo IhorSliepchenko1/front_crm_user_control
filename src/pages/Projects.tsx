@@ -10,6 +10,7 @@ import Pagination from "@/components/UI/Pagination";
 import ProjectRows from "@/components/tables/rows/ProjectRows";
 import TableScrolContainer from "@/components/UI/TableScrolContainer";
 import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
+import { useChangeActive } from "@/hooks/useChangeActive";
 
 type Users = {
   id: string;
@@ -20,8 +21,8 @@ const Projects = () => {
   const isAdmin = useAppSelector(isAdminRole);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(25);
-  const [active, setActive] = useState(true);
   const [isMy, setIsMy] = useState(false);
+  const { active, changeActive } = useChangeActive();
 
   const { data, isLoading } = useProjectAllQuery({
     page,
@@ -32,10 +33,6 @@ const Projects = () => {
   const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
   const total = data?.data?.count_pages ?? 1;
   const projects = data?.data?.projects ?? [];
-
-  const changeActive = (args: boolean) => {
-    setActive(args);
-  };
 
   const isLoad = isLoadingUsers && isLoading;
 
@@ -106,7 +103,7 @@ const Projects = () => {
                   withColumnBorders
                   className="min-w-[1300px]"
                 >
-                  <ProjectHeader />
+                  <ProjectHeader isShow={true} />
                   <ProjectRows
                     projects={projects}
                     page={page}
@@ -114,6 +111,7 @@ const Projects = () => {
                     active={active}
                     isMy={isMy}
                     isAdmin={Boolean(isAdmin)}
+                    isShow={true}
                   />
                 </Table>
               </TableScrolContainer>

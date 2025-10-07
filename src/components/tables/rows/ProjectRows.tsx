@@ -13,9 +13,11 @@ type Props = {
   projects: ProjectItem[];
   page: number;
   limit: number;
-  active: boolean;
+  active?: boolean;
   isAdmin?: boolean;
   isMy?: boolean;
+  isShow?: boolean;
+  isRoute?: boolean;
 };
 
 const ProjectRows: React.FC<Props> = ({
@@ -23,14 +25,14 @@ const ProjectRows: React.FC<Props> = ({
   page,
   limit,
   isAdmin = false,
-  active,
+  active = true,
   isMy = false,
+  isShow = false,
+  isRoute = true,
 }) => {
   const { succeed, error } = useNotification();
-
   const [isActive] = useIsActiveProjectMutation();
   const [triggerProjects] = useLazyProjectAllQuery();
-
   const { changePage } = useChangePage();
 
   const changeStatus = async (id: string) => {
@@ -51,12 +53,16 @@ const ProjectRows: React.FC<Props> = ({
   const rows = projects.map((project) => (
     <Table.Tr key={project.id} className="text-[12px]">
       <Table.Td className="text-[8px]">
-        <Anchor
-          underline="hover"
-          onClick={() => changePage(project.id, "projects/project")}
-        >
-          {project.name}
-        </Anchor>
+        {isRoute ? (
+          <Anchor
+            underline="hover"
+            onClick={() => changePage(project.id, "/projects/project")}
+          >
+            {project.name}
+          </Anchor>
+        ) : (
+          project.name
+        )}
       </Table.Td>
       <Table.Td>{project.created_at}</Table.Td>
       <Table.Td>
@@ -73,18 +79,20 @@ const ProjectRows: React.FC<Props> = ({
       <Table.Td>{project.in_reviews_tasks}</Table.Td>
       <Table.Td>{project.done_tasks}</Table.Td>
       <Table.Td>{project.canceled_task}</Table.Td>
-      <Table.Td>
-        {
-          <Button
-            variant="light"
-            color={project.is_active ? "red" : "green"}
-            size="xs"
-            onClick={() => changeStatus(project.id)}
-          >
-            {project.is_active ? "blocked" : "active"}
-          </Button>
-        }
-      </Table.Td>
+      {isShow && (
+        <Table.Td>
+          {
+            <Button
+              variant="light"
+              color={project.is_active ? "red" : "green"}
+              size="xs"
+              onClick={() => changeStatus(project.id)}
+            >
+              {project.is_active ? "blocked" : "active"}
+            </Button>
+          }
+        </Table.Td>
+      )}
     </Table.Tr>
   ));
   return <Table.Tbody>{rows}</Table.Tbody>;

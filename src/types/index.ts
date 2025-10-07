@@ -7,7 +7,8 @@ export type ApiResponse<T = undefined> = {
 export type Pagination = {
   page: number;
   limit: number;
-  active: boolean;
+  active?: boolean;
+  userId?: string;
 };
 
 export type PageDetails = {

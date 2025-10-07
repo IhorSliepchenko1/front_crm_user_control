@@ -6,6 +6,7 @@ import { Divider } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import PageTitle from "@/components/UI/PageTitle";
 import UserMainInfo from "@/components/items/UserMainInfo";
+import ProjectsWithMe from "@/components/data/ProjectsWithMe";
 
 const User = () => {
   const { id } = useParams();
@@ -30,6 +31,7 @@ const User = () => {
             isAdmin={isAdmin as boolean}
           />
           <Divider my="md" />
+          <ProjectsWithMe />
         </div>
       )}
     </>

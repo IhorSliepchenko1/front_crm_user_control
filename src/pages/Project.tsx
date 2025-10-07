@@ -18,6 +18,8 @@ import type { User } from "@/app/services/user/userTypes";
 import AddTaskModal from "@/components/modals/AddTaskModal";
 import { useFromToDate } from "@/hooks/useFromToDate";
 import type { CalendarValue, TModal } from "@/app/services/tasks/tasksTypes";
+import { useSelector } from "react-redux";
+import { myInfo } from "@/app/features/authSlice";
 
 const procectDataDefault = {
   participants: [{ id: "", login: "" }],
@@ -50,7 +52,7 @@ const Project = () => {
   const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
   const { data: tasksData, isLoading: isLoadingTasks } =
     useTaskByProjectIdQuery(projectQuery);
-
+  const myInfoData = useSelector(myInfo);
   const tasks = tasksData?.data?.tasks ?? [];
   const total = tasksData?.data?.count_pages ?? 1;
   const projectData = data?.data?.project ?? procectDataDefault;
@@ -82,27 +84,36 @@ const Project = () => {
       <div className="mt-10 grid xl:flex gap-5">
         <div className="flex gap-5">
           <ProjectData projectInfo={projectInfo} />
-          <Divider orientation="vertical" />
-          <div>
-            <Title order={4}>Участники</Title>
-            <RemoveParticipants
-              projectId={id as string}
-              participants={participants}
-              projectQuery={projectQuery}
-            />
-          </div>
+          {(myInfoData.name === creator.login ||
+            myInfoData.roles.includes("ADMIN")) && (
+            <>
+              <Divider orientation="vertical" />
+              <div>
+                <Title order={4}>Участники</Title>
+                <RemoveParticipants
+                  projectId={id as string}
+                  participants={participants}
+                  projectQuery={projectQuery}
+                />
+              </div>
+            </>
+          )}
         </div>
-        <Divider orientation="vertical" />
-
-        <div className="xl:w-[30%]">
-          <div className="grid gap-4">
-            <AddParticipants
-              projectId={id as string}
-              users={removeCurentUsers as User[]}
-            />
-            <RenameProject projectId={id as string} />
-          </div>
-        </div>
+        {(myInfoData.name === creator.login ||
+          myInfoData.roles.includes("ADMIN")) && (
+          <>
+            <Divider orientation="vertical" />
+            <div className="xl:w-[30%]">
+              <div className="grid gap-4">
+                <AddParticipants
+                  projectId={id as string}
+                  users={removeCurentUsers as User[]}
+                />
+                <RenameProject projectId={id as string} />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <Divider my="md" />
