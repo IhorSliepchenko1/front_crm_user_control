@@ -25,7 +25,8 @@ const ProjectsWithMe = ({ isRoute = false }: { isRoute?: boolean }) => {
     <Loader />
   ) : (
     <div>
-      <div className="flex items-end justify-end mb-2">
+      <div className="flex items-end justify-between mb-2">
+        <strong>Отображены только активные проекты</strong>
         <NativeSelect
           value={limit}
           label={"К-во"}

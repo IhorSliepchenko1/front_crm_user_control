@@ -12,11 +12,11 @@ import type { User } from "@/app/services/user/userTypes";
 import type { TProjectQuery } from "@/app/services/projects/projectsTypes";
 import { useExstractId } from "@/hooks/useExstractId";
 import { useEditor } from "@tiptap/react";
-import Highlight from '@tiptap/extension-highlight';
-import StarterKit from '@tiptap/starter-kit';
-import TextAlign from '@tiptap/extension-text-align';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
+import Highlight from "@tiptap/extension-highlight";
+import StarterKit from "@tiptap/starter-kit";
+import TextAlign from "@tiptap/extension-text-align";
+import Superscript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
 import Link from "@tiptap/extension-link";
 import Editor from "../UI/Editor";
 
@@ -105,7 +105,8 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
       const formData = new FormData();
 
       formData.append("name", name);
-      formData.append("deadline", `${deadline.split(" ").join("T")}Z`);
+      if (data.deadline)
+        formData.append("deadline", new Date(deadline).toISOString());
       formData.append("taskDescription", html);
       formData.append("executors", JSON.stringify(executors));
       if (files && files.length) {

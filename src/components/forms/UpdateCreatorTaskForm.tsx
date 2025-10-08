@@ -44,8 +44,8 @@ const UpdateCreatorTaskForm: React.FC<Props> = ({
   participants,
 }) => {
   const validateDeadline = (date: string) => {
-    const now = new Date();
-    const deadline = new Date(date);
+    const now = new Date().toLocaleString();
+    const deadline = new Date(date).toLocaleString();
     return now > deadline;
   };
   const [value, setValue] = useState<string[]>([]);
@@ -111,8 +111,8 @@ const UpdateCreatorTaskForm: React.FC<Props> = ({
 
       const formData = new FormData();
       if (data.name && data.name !== name) formData.append("name", data.name);
-      if (data.deadline && data.deadline !== deadline)
-        formData.append("deadline", `${data.deadline.split(" ").join("T")}Z`);
+      if (data.deadline)
+        formData.append("deadline", new Date(data.deadline).toISOString());
       if (taskDescription !== html) formData.append("taskDescription", html);
       if (executorsAdd.length)
         formData.append("executorsAdd", JSON.stringify(executorsAdd));
@@ -180,14 +180,7 @@ const UpdateCreatorTaskForm: React.FC<Props> = ({
           size="sm"
         />
 
-        <Button
-          type="submit"
-          variant="outline"
-          color="green"
-          disabled={
-            !form.isDirty() && value.length === 0 && taskDescription === html
-          }
-        >
+        <Button type="submit" variant="outline" color="green">
           Изменить
         </Button>
       </form>

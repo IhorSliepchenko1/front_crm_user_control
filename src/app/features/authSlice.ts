@@ -8,6 +8,7 @@ type InitialState = {
     roles: UserRoles;
     avatarPath: string | null;
     name: string;
+    userId: string;
   } | null;
 };
 
@@ -40,6 +41,7 @@ export const myInfo = (state: RootState) => {
       roles: [],
       avatarPath: "",
       name: "",
+      userId: "",
     }
   );
 };

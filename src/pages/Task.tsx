@@ -10,9 +10,10 @@ import { useDisclosure } from "@mantine/hooks";
 import UpdateExecutorTaskModal from "@/components/modals/UpdateExecutorTaskModal";
 import TaskDescScrolContainer from "@/components/UI/TaskDescScrolContainer";
 import { useAppSelector } from "@/app/hooks";
-import { myInfo } from "@/app/features/authSlice";
+import { isAdminRole, myInfo } from "@/app/features/authSlice";
 import UpdateCreatorTaskModal from "@/components/modals/UpdateCreatorTaskModal";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 type TPathTask = {
   filePathTask: TFile[];
@@ -88,6 +89,8 @@ const Task = () => {
     }
   );
 
+  const isAdmin = useSelector(isAdminRole);
+
   return (
     <>
       {isLoading ? (
@@ -115,7 +118,7 @@ const Task = () => {
                     />
                   </Typography>
                 </TaskDescScrolContainer>
-                {currentName === task.project.creator.login && (
+                {(currentName == task.project.creator.login || isAdmin) && (
                   <Button
                     color="red"
                     fullWidth
@@ -175,7 +178,7 @@ const Task = () => {
             onClick={() => changeModal("executor")}
             disabled={task.status !== "IN_PROGRESS"}
           >
-            Отпправить решение
+            Отправить решение
           </Button>
         </div>
       )}

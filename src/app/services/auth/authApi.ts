@@ -37,7 +37,12 @@ export const authApi = api.injectEndpoints({
     }),
 
     getMe: builder.query<
-      { roles: UserRoles; avatarPath: string | null; name: string },
+      {
+        roles: UserRoles;
+        avatarPath: string | null;
+        name: string;
+        userId: string;
+      },
       void
     >({
       query: () => ({
