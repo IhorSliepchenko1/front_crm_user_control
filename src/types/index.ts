@@ -9,6 +9,8 @@ export type Pagination = {
   limit: number;
   active?: boolean;
   userId?: string;
+  isRead?: boolean;
+  my?: boolean;
 };
 
 export type PageDetails = {
@@ -16,4 +18,17 @@ export type PageDetails = {
   count_pages: number;
   page: number;
   limit: number;
+};
+
+export type TypeGateway =
+  | "NOTIFICATION"
+  | "LOGOUT"
+  | "TRIGGER_USERS"
+  | "TRIGGER_TASKS"
+  | "TRIGGER_PROJECTS";
+
+export type SocketData = {
+  subject: string;
+  message: string;
+  types: TypeGateway[];
 };

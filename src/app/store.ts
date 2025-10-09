@@ -5,11 +5,13 @@ import {
 } from "@reduxjs/toolkit";
 import { api } from "./services/api";
 import auth from "./features/authSlice";
+import socketTypes from "./features/socketTypeSlice";
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     auth,
+    socketTypes,
   },
 
   middleware: (getDefaultMiddleware) => {

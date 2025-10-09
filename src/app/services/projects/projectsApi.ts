@@ -45,10 +45,7 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    projectAll: builder.query<
-      ApiResponse<GetProjectsData>,
-      Pagination & { my?: boolean }
-    >({
+    projectAll: builder.query<ApiResponse<GetProjectsData>, Pagination>({
       query: ({ page, limit, active, my }) => ({
         url: `/projects/all`,
         method: METHODS.GET,

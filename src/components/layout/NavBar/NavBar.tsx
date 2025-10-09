@@ -6,11 +6,12 @@ import {
   useLogoutMeMutation,
 } from "@/app/services/auth/authApi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { House, LogOut, Users, FolderKanban } from "lucide-react";
+import { House, LogOut, Users, FolderKanban, Bell } from "lucide-react";
 import NavbarLink from "@/components/UI/NavbarLink/NavbarLink";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { myInfo } from "@/app/features/authSlice";
+import { socket } from "@/socket";
 
 const NavBar = () => {
   const url = import.meta.env.VITE_API_URL;
@@ -31,6 +32,9 @@ const NavBar = () => {
   const logoutSession = async () => {
     try {
       const { message } = await logout().unwrap();
+      socket.disconnect();
+      console.log(socket.connected);
+
       navigate("/login");
       succeed(message);
       triggerMe();

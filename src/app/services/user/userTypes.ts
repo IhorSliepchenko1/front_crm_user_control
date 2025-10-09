@@ -5,6 +5,7 @@ export type UserData = {
   id: string;
   name: string;
   is_active: boolean;
+  is_online: boolean;
   created_at: string;
   creator_projects: number;
   participant_projects: number;

@@ -30,6 +30,7 @@ const Projects = () => {
     active,
     ...(isAdmin && { my: isMy }),
   });
+
   const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
   const total = data?.data?.count_pages ?? 1;
   const projects = data?.data?.projects ?? [];

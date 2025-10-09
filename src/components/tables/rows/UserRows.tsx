@@ -55,10 +55,7 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
         onClick={() => changePage(user.id, "user")}
         className="text-[8px]"
       >
-        <Anchor underline="hover">
-          {user.name}
-          <span className="text-[red]">{name === user.name ? " (Я)" : ""}</span>
-        </Anchor>
+        <Anchor underline="hover">{user.name}</Anchor>
       </Table.Td>
       <Table.Td>
         <Center>
@@ -68,6 +65,18 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
             <Avatar name={user.name} color="initials" />
           )}
         </Center>
+
+        <div className="flex items-center justify-end">
+          <span
+            style={{
+              width: 5,
+              height: 5,
+              background: user.is_online ? "green" : "red",
+              display: "block",
+              borderRadius: "50%",
+            }}
+          ></span>
+        </div>
       </Table.Td>
 
       <Table.Td>{user.created_at}</Table.Td>
