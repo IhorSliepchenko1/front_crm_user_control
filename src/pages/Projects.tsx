@@ -1,8 +1,11 @@
 import { useAppSelector } from "@/app/hooks";
 import AddProject from "../components/forms/AddProject";
 import { isAdminRole } from "@/app/features/authSlice";
-import { useState } from "react";
-import { useProjectAllQuery } from "@/app/services/projects/projectsApi";
+import { useEffect, useState } from "react";
+import {
+  useLazyProjectAllQuery,
+  useProjectAllQuery,
+} from "@/app/services/projects/projectsApi";
 import Loader from "@/components/UI/Loader";
 import { Button, NativeSelect, Table } from "@mantine/core";
 import ProjectHeader from "@/components/tables/headers/ProjectHeader";
@@ -11,6 +14,8 @@ import ProjectRows from "@/components/tables/rows/ProjectRows";
 import TableScrolContainer from "@/components/UI/TableScrolContainer";
 import { useGetUsersProjectQuery } from "@/app/services/user/userApi";
 import { useChangeActive } from "@/hooks/useChangeActive";
+import { socketType } from "@/app/features/socketTypeSlice";
+import { useSelector } from "react-redux";
 
 type Users = {
   id: string;
@@ -23,19 +28,27 @@ const Projects = () => {
   const [limit, setLimit] = useState<number>(25);
   const [isMy, setIsMy] = useState(false);
   const { active, changeActive } = useChangeActive();
-
-  const { data, isLoading } = useProjectAllQuery({
+  const query = {
     page,
     limit,
     active,
     ...(isAdmin && { my: isMy }),
-  });
+  };
+
+  const { data, isLoading } = useProjectAllQuery(query);
 
   const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
+  const [triggerProjects] = useLazyProjectAllQuery();
   const total = data?.data?.count_pages ?? 1;
   const projects = data?.data?.projects ?? [];
-
   const isLoad = isLoadingUsers && isLoading;
+  const { projectId } = useSelector(socketType);
+
+  useEffect(() => {
+    if (projectId) {
+      triggerProjects(query);
+    }
+  }, [projectId]);
 
   return (
     <>

@@ -10,7 +10,6 @@ import { DateTimePicker } from "@mantine/dates";
 import { useState } from "react";
 import type { User } from "@/app/services/user/userTypes";
 import type { TProjectQuery } from "@/app/services/projects/projectsTypes";
-import { useExstractId } from "@/hooks/useExstractId";
 import { useEditor } from "@tiptap/react";
 import Highlight from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
@@ -19,6 +18,7 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import Link from "@tiptap/extension-link";
 import Editor from "../UI/Editor";
+import { useExtractId } from "@/hooks/useExtractId";
 
 type CreateTaskFormData = {
   name: string;
@@ -93,12 +93,12 @@ const AddTask: React.FC<Props> = ({ projectQuery, participants, close }) => {
   const [addTask] = useAddTaskMutation();
   const [triggerTasks] = useLazyTaskByProjectIdQuery();
   const arrayUserName = participants.map((p) => p.login);
-  const { exstract } = useExstractId("login", "id");
+  const { extract } = useExtractId("login", "id");
 
   const onSubmit = async (data: CreateTaskFormData) => {
     try {
       const { name, deadline, files } = data;
-      const executors = exstract({
+      const executors = extract({
         str: value,
         obj: participants,
       });

@@ -131,9 +131,9 @@ export const authApi = api.injectEndpoints({
 
 export const {
   useLazyTaskByProjectIdQuery,
+  useLazyTaskByIdQuery,
   useTaskByProjectIdQuery,
   useAddTaskMutation,
-  useLazyTaskByIdQuery,
   useTaskByIdQuery,
   useUpdateExecutorByTaskIdMutation,
   useUpdateCreatorByTaskIdMutation,

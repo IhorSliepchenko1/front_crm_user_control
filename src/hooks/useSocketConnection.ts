@@ -19,9 +19,9 @@ export const useSocketConnection = () => {
     }
 
     socket.on("notification", (data: SocketData) => {
-      const { subject: title, message, types } = data;
-      dispatch(addTypes(types));
-      
+      const { subject: title, message, taskId, projectId } = data;
+      dispatch(addTypes({ taskId, projectId }));
+
       notifications.show({
         title,
         message,

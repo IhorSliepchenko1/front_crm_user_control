@@ -17,7 +17,7 @@ import Editor from "../UI/Editor";
 import { DateTimePicker } from "@mantine/dates";
 import { useState } from "react";
 import type { User } from "@/app/services/user/userTypes";
-import { useExstractId } from "@/hooks/useExstractId";
+import { useExtractId } from "@/hooks/useExtractId";
 
 type UpdateCreatorTaskFormData = {
   name: string;
@@ -100,11 +100,11 @@ const UpdateCreatorTaskForm: React.FC<Props> = ({
   const { succeed, error } = useNotification();
 
   const arrayUserName = participants.map((p) => p.login);
-  const { exstract } = useExstractId("login", "id");
+  const { extract } = useExtractId("login", "id");
 
   const onSubmit = async (data: UpdateCreatorTaskFormData) => {
     try {
-      const executorsAdd = exstract({
+      const executorsAdd = extract({
         str: value,
         obj: participants,
       });

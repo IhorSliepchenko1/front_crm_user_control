@@ -3,7 +3,7 @@ import {
   useLazyProjectByIdQuery,
 } from "@/app/services/projects/projectsApi";
 import type { User } from "@/app/services/user/userTypes";
-import { useExstractId } from "@/hooks/useExstractId";
+import { useExtractId } from "@/hooks/useExtractId";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
 import { Button, MultiSelect } from "@mantine/core";
@@ -40,11 +40,11 @@ const AddParticipants: React.FC<Props> = ({ projectId, users = [] }) => {
   const arrayUserName = users.map((u) => u.login);
   const [value, setValue] = useState<string[]>([]);
 
-  const { exstract } = useExstractId("login", "id");
+  const { extract } = useExtractId("login", "id");
 
   const onSubmit = async () => {
     try {
-      const ids = exstract({
+      const ids = extract({
         str: value,
         obj: users,
       });

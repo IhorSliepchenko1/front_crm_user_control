@@ -1,31 +1,34 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { TypeGateway } from "@/types";
 import type { RootState } from "../store";
 
 type InitialState = {
-  types: TypeGateway[] | null;
+  taskId: string | null;
+  projectId: string | null;
 };
 
 const initialState: InitialState = {
-  types: null,
+  taskId: null,
+  projectId: null,
 };
 
 const socketTypeSlice = createSlice({
   name: `socket-types`,
   initialState,
   reducers: {
-    addTypes: (state, action: PayloadAction<TypeGateway[]>) => {
-      state.types = action.payload;
+    addTypes: (state, action: PayloadAction<InitialState>) => {
+      state.taskId = action.payload.taskId;
+      state.projectId = action.payload.projectId;
     },
     cleanTypes: (state) => {
-      state.types = null;
+      state.taskId = null;
+      state.projectId = null;
     },
   },
 });
 
 export const { addTypes, cleanTypes } = socketTypeSlice.actions;
 export const socketType = (state: RootState) => {
-  const { types } = state.socketTypes;
-  return { types };
+  const { taskId, projectId } = state.socketTypes;
+  return { taskId, projectId };
 };
 export default socketTypeSlice.reducer;

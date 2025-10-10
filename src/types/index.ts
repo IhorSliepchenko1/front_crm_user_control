@@ -20,15 +20,9 @@ export type PageDetails = {
   limit: number;
 };
 
-export type TypeGateway =
-  | "NOTIFICATION"
-  | "LOGOUT"
-  | "TRIGGER_USERS"
-  | "TRIGGER_TASKS"
-  | "TRIGGER_PROJECTS";
-
 export type SocketData = {
   subject: string;
   message: string;
-  types: TypeGateway[];
+  taskId: string;
+  projectId: string;
 };

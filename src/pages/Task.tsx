@@ -1,4 +1,4 @@
-import { useTaskByIdQuery } from "@/app/services/tasks/tasksApi";
+import { useLazyTaskByIdQuery, useTaskByIdQuery } from "@/app/services/tasks/tasksApi";
 import Loader from "@/components/UI/Loader";
 import PageTitle from "@/components/UI/PageTitle";
 import { Button, Divider, Title, Typography } from "@mantine/core";
@@ -12,8 +12,9 @@ import TaskDescScrolContainer from "@/components/UI/TaskDescScrolContainer";
 import { useAppSelector } from "@/app/hooks";
 import { isAdminRole, myInfo } from "@/app/features/authSlice";
 import UpdateCreatorTaskModal from "@/components/modals/UpdateCreatorTaskModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { socketType } from "@/app/features/socketTypeSlice";
 
 type TPathTask = {
   filePathTask: TFile[];
@@ -56,6 +57,7 @@ const Task = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { data, isLoading } = useTaskByIdQuery(id as string);
+  const [triggerTaskById] = useLazyTaskByIdQuery();
   const [modal, setModal] = useState<"executor" | "creator">();
 
   const task: TaskById = data?.data ?? defaultTask;
@@ -90,6 +92,14 @@ const Task = () => {
   );
 
   const isAdmin = useSelector(isAdminRole);
+
+  const { taskId } = useSelector(socketType);
+
+  useEffect(() => {
+    if (taskId && taskId === id) {
+      triggerTaskById(taskId);
+    }
+  }, [taskId]);
 
   return (
     <>

@@ -8,7 +8,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import RenameProject from "@/components/forms/RenameProject";
 import { useEffect, useState } from "react";
 import TaskData from "@/components/data/TaskData";
-import { useTaskByProjectIdQuery } from "@/app/services/tasks/tasksApi";
+import {
+  useLazyTaskByProjectIdQuery,
+  useTaskByProjectIdQuery,
+} from "@/app/services/tasks/tasksApi";
 import { useDisclosure } from "@mantine/hooks";
 import RemoveParticipants from "@/components/forms/RemoveParticipants/RemoveParticipants";
 import AddParticipants from "@/components/forms/AddParticipants";
@@ -20,6 +23,7 @@ import { useFromToDate } from "@/hooks/useFromToDate";
 import type { CalendarValue, TModal } from "@/app/services/tasks/tasksTypes";
 import { useSelector } from "react-redux";
 import { myInfo } from "@/app/features/authSlice";
+import { socketType } from "@/app/features/socketTypeSlice";
 
 const procectDataDefault = {
   participants: [{ id: "", login: "" }],
@@ -52,6 +56,7 @@ const Project = () => {
   const { data: users, isLoading: isLoadingUsers } = useGetUsersProjectQuery();
   const { data: tasksData, isLoading: isLoadingTasks } =
     useTaskByProjectIdQuery(projectQuery);
+  const [triggerTasks] = useLazyTaskByProjectIdQuery();
   const myInfoData = useSelector(myInfo);
   const tasks = tasksData?.data?.tasks ?? [];
   const total = tasksData?.data?.count_pages ?? 1;
@@ -75,6 +80,14 @@ const Project = () => {
       navigate(-1);
     }
   }, [isError]);
+
+  const { projectId } = useSelector(socketType);
+
+  useEffect(() => {
+    if (projectId && projectId === projectQuery.projectId) {
+      triggerTasks(projectQuery);
+    }
+  }, [projectId]);
 
   return isLoadData ? (
     <Loader />

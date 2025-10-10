@@ -15,7 +15,8 @@ const UserData: React.FC<Props> = ({ userData }) => {
         {userData.map(
           (user, index) =>
             user.title !== "id" &&
-            user.title !== "avatarPath" && (
+            user.title !== "avatarPath" &&
+            user.title !== "online" && (
               <div className="flex justify-between" key={index}>
                 <span>{user.title}:</span>
                 <strong>{user.value}</strong>

@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "./NavBar/NavBar";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 import {
@@ -11,8 +11,6 @@ import NotificationModal from "../modals/NotificationModal";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { socketType } from "@/app/features/socketTypeSlice";
-import { useNotification } from "@/hooks/useNotification/useNotification";
-import { errorMessages } from "@/utils/is-error-message";
 import { useTriggerData } from "@/hooks/useTriggerData";
 
 const defaultNotificationData = [
@@ -45,21 +43,16 @@ const Main = () => {
   const countNoRead = data?.data?.count_no_read ?? 0;
   const total = data?.data?.count_pages ?? 1;
   const [opened, { open, close }] = useDisclosure(false);
-  const { types } = useSelector(socketType);
-  const { onTrigger } = useTriggerData(types);
+  const { taskId } = useSelector(socketType);
+  const { onTrigger } = useTriggerData(taskId);
 
   useEffect(() => {
-    if (types && types.includes("NOTIFICATION")) {
-      console.log("onTrigger");
-      onTrigger({
-        page,
-        limit,
-        isRead,
-      });
-    }
-
-    console.log(types);
-  }, [types]);
+    onTrigger({
+      page,
+      limit,
+      isRead,
+    });
+  }, [taskId]);
 
   return (
     <main>

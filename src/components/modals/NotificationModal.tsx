@@ -49,7 +49,7 @@ const NotificationModal: React.FC<Props> = ({
           </Tabs.Tab>
         </Tabs.List>
         {["no-read", "read"].map((value) => (
-          <Tabs.Panel value={value}>
+          <Tabs.Panel value={value} key={value}>
             {
               <NotificationData
                 data={data}

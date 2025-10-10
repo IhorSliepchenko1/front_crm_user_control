@@ -58,15 +58,13 @@ const UserRows: React.FC<Props> = ({ users, page, limit, active, isAdmin }) => {
         <Anchor underline="hover">{user.name}</Anchor>
       </Table.Td>
       <Table.Td>
-        <Center>
+        <div className="flex justify-center items-end">
           {user.avatarPath ? (
             <Avatar src={`${url}/avatars/${user.avatarPath}`} alt="it's user" />
           ) : (
             <Avatar name={user.name} color="initials" />
           )}
-        </Center>
 
-        <div className="flex items-center justify-end">
           <span
             style={{
               width: 5,

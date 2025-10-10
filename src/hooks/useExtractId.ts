@@ -3,11 +3,11 @@ type Data<T extends string, K extends string> = {
   obj: Array<Record<T | K, string>>;
 };
 
-export const useExstractId = <T extends string, K extends string>(
+export const useExtractId = <T extends string, K extends string>(
   key1: T,
   key2: K
 ) => {
-  function exstract(data: Data<T, K>): string[] {
+  function extract(data: Data<T, K>): string[] {
     const { str, obj } = data;
 
     const ids = str.map((n) => {
@@ -18,5 +18,5 @@ export const useExstractId = <T extends string, K extends string>(
     return ids;
   }
 
-  return { exstract };
+  return { extract };
 };
