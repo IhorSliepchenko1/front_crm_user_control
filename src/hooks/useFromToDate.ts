@@ -6,9 +6,15 @@ export const useFromToDate = (value: CalendarValue) => {
     if (value[0] !== null) {
       const [start, end] = value;
 
-      const deadlineFrom = start ? `${start}T00:00:00.000Z` : undefined;
-      const to = `${end}T23:59:59.000Z`;
-      const deadlineTo = end ? to : !end && start ? deadlineFrom : undefined;
+      const deadlineFrom = start
+        ? new Date(`${start}T00:00:00`).toISOString()
+        : undefined;
+      const to = end;
+      const deadlineTo = end
+        ? new Date(`${to}T23:59:59`).toISOString()
+        : !end && start
+        ? deadlineFrom
+        : undefined;
 
       return { deadlineFrom, deadlineTo };
     }

@@ -9,7 +9,7 @@ import type { UserData } from "@/app/services/user/userTypes";
 import { useChangePage } from "@/hooks/useChangePage";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";
-import { Anchor, Avatar, Badge, Button, Center, Table } from "@mantine/core";
+import { Anchor, Avatar, Badge, Button,Table } from "@mantine/core";
 
 type Props = {
   users: UserData[];

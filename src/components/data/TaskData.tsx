@@ -11,7 +11,7 @@ import type {
   TProjectQuery,
 } from "@/app/services/projects/projectsTypes";
 import { useTranslateStatus } from "@/hooks/useTranslateStatus";
-import { myInfo } from "@/app/features/authSlice";
+import { isAdminRole, myInfo } from "@/app/features/authSlice";
 
 type Props = {
   tasks: TaskItem[];
@@ -40,12 +40,12 @@ const TaskData: React.FC<Props> = ({
   projectQuery,
 }) => {
   const { translateToChange } = useTranslateStatus();
-
   const openModal = (modal: "calendar" | "addTask") => {
     setModal(modal);
     open();
   };
   const { name } = useAppSelector(myInfo);
+  const isAdmin = useAppSelector(isAdminRole);
 
   return (
     <div className="">
@@ -98,7 +98,7 @@ const TaskData: React.FC<Props> = ({
             <TaskRows
               tasks={tasks}
               projectQuery={projectQuery}
-              isShow={name === creatorName}
+              isShow={name === creatorName || (isAdmin as boolean)}
             />
           </Table>
         </TableScrolContainer>
