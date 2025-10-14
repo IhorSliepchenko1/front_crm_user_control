@@ -6,7 +6,7 @@ import {
   useLogoutMeMutation,
 } from "@/app/services/auth/authApi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { House, LogOut, Users, FolderKanban, Bell } from "lucide-react";
+import { House, LogOut, Users, FolderKanban } from "lucide-react";
 import NavbarLink from "@/components/UI/NavbarLink/NavbarLink";
 import { useNotification } from "@/hooks/useNotification/useNotification";
 import { errorMessages } from "@/utils/is-error-message";

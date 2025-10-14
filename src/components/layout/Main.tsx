@@ -1,10 +1,7 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar/NavBar";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
-import {
-  useLazyNotificationsQuery,
-  useNotificationsQuery,
-} from "@/app/services/notifications/notificationsApi";
+import { useNotificationsQuery } from "@/app/services/notifications/notificationsApi";
 import { Bell } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import NotificationModal from "../modals/NotificationModal";
